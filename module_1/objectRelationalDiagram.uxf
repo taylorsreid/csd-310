@@ -4,7 +4,7 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>80</x>
+      <x>40</x>
       <y>50</y>
       <w>210</w>
       <h>70</h>
@@ -13,5 +13,37 @@
 --
 </panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>50</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>ROLE
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>70</y>
+      <w>410</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+r1=
+m1=1
+r2=
+m2=*
+m1pos=10,0
+r2pos=-13,-4
+multiple lines are possible
+</panel_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
   </element>
 </diagram>

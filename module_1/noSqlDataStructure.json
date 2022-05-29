@@ -1,19 +1,10 @@
 {
+    "id": 9586856,
     "firstName": "John",
     "lastName": "Smith",
     "birthdate": 19910101,
     "sex": "M",
-    "roles": [
-        {
-            "rolename": "student",
-            "desc": "Someone who attends school and studies"
-        },
-
-        {
-            "rolename": "valet",
-            "desc": "Someone who parks cars for a living."
-        }
-        ],
+    "roles": ["bellman", "valet"],
 
     "dependents": [
         {
