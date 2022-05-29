@@ -1,0 +1,35 @@
+{
+    "firstName": "John",
+    "lastName": "Smith",
+    "birthdate": 19910101,
+    "sex": "M",
+    "roles": [
+        {
+            "rolename": "student",
+            "desc": "Someone who attends school and studies"
+        },
+
+        {
+            "rolename": "valet",
+            "desc": "Someone who parks cars for a living."
+        }
+        ],
+
+    "dependents": [
+        {
+            "depFirstName": "Jane",
+            "depLastName": "Smith",
+            "depBirthdate": 19911103,
+            "depSex": "F",
+            "depRelation": "spouse"
+        },
+            
+        {
+            "depFirstName": "Jill",
+            "depLastName": "Smith",
+            "depBirthdate": 20220405,
+            "depSex": "F",
+            "depRelation": "daughter"
+        }
+    ]
+}
