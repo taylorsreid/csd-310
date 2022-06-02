@@ -1,0 +1,24 @@
+{
+    "student":
+    {
+        "student_id": "123456",
+        "first_name": "Taylor",
+        "last_name": "Reid"
+    },
+
+    "enrollment":
+    {
+        "term": "spr2022",
+        "gpa": "4.0",
+        "start_date": "20220315",
+        "end_date": "20220631"
+    },
+
+    "course":
+    {
+        "course_id": "",
+        "description": "",
+        "instructor": "",
+        "grade": ""
+    }
+}

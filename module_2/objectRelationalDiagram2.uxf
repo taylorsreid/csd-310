@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1380</x>
+      <y>10</y>
+      <w>100</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Taylor Reid
+6/1/2022
+Module 2.2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>80</x>
+      <y>340</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>STUDENT
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>80</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>ENROLLMENT
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>630</x>
+      <y>340</y>
+      <w>210</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>COURSES
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>170</x>
+      <y>90</y>
+      <w>230</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>lt=-
+r1=1
+m1=
+r2=*
+m2=
+m1pos=10,0
+r2pos=-13,-4</panel_attributes>
+    <additional_attributes>10.0;250.0;10.0;30.0;210.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>100</y>
+      <w>180</w>
+      <h>260</h>
+    </coordinates>
+    <panel_attributes>lt=-
+r1=*
+m1=
+r2=1
+m2=
+m1pos=10,0
+r2pos=-13,-4</panel_attributes>
+    <additional_attributes>150.0;240.0;150.0;30.0;10.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>350</y>
+      <w>370</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+r1=1
+m1=
+r2=*
+m2=
+m1pos=10,0
+r2pos=-13,-4
+ENROLLS</panel_attributes>
+    <additional_attributes>10.0;30.0;350.0;30.0</additional_attributes>
+  </element>
+</diagram>
