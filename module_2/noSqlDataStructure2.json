@@ -1,24 +1,53 @@
 {
-    "student":
-    {
-        "student_id": "123456",
-        "first_name": "Taylor",
-        "last_name": "Reid"
-    },
+    "student_id": 123456,
+    "first_name": "Taylor",
+    "last_name": "Reid",
 
-    "enrollment":
-    {
-        "term": "spr2022",
-        "gpa": "4.0",
-        "start_date": "20220315",
-        "end_date": "20220631"
-    },
+    "enrollments": [
+        {
+            "term": "2022spr",
+            "gpa": "4.0",
+            "start_date": 20220315,
+            "end_date": 20220631,
 
-    "course":
-    {
-        "course_id": "",
-        "description": "",
-        "instructor": "",
-        "grade": ""
-    }
+            "courses": [
+                {
+                    "course_id": "CSD310",
+                    "description": "Database Development and Use",
+                    "instructor": "Sue Sampson",
+                    "grade": "A"
+                },
+
+                {
+                    "course_id": "CSD320",
+                    "description": "Programming with Java",
+                    "instructor": "Darrell Payne",
+                    "grade": "A"
+                }
+            ]
+        },
+        
+        {
+            "term": "2022fall",
+            "gpa": "4.0",
+            "start_date": 20220815,
+            "end_date": 20221131,
+
+            "courses":[
+                {
+                    "course_id": "CSD340",
+                    "description": "Web Development with HTML and CSS",
+                    "instructor": "Sue Sampson",
+                    "grade": "A"
+                },
+
+                {
+                    "course_id": "CSD405",
+                    "description": "Intermediate Java Programming",
+                    "instructor": "Darrell Payne",
+                    "grade": "A"
+                }
+            ]
+        }
+    ]
 }
