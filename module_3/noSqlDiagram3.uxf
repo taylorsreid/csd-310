@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>60</x>
+      <y>50</y>
+      <w>240</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>BOOK DOCUMENT
+--
+{
+"book_name": "NoSQL Distilled",
+"book_isbn": 9780321826626,
+"book_price": 30.00,</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>200</y>
+      <w>370</w>
+      <h>270</h>
+    </coordinates>
+    <panel_attributes>AUTHOR DOCUMENT
+--
+"author_info": [
+{
+"author_last_name": "Sadalage",
+"author_first_name": "Pramod",
+"author_phone": "123-456-7890",
+ "author_email": "pramodsadalage@example.com"
+},
+
+{
+"author_last_name": "Fowler",
+"author_first_name": "Martin",
+"author_phone": "987-654-3210",
+"author_email": "martinfowler@example.com"
+}
+],</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>310</x>
+      <y>520</y>
+      <w>500</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>PUBLISHER DOCUMENT
+--
+"publisher_info": {
+"publisher_name": "Pearson Publishing",
+"publisher_code": "0118 999 881 999 119 725 3",
+"publisher_address": "80 Strand, London WC2R 0RL, United Kingdom"
+}
+}</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>140</y>
+      <w>170</w>
+      <h>480</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=
+m2=1.1              *.1
+HAS
+</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;450.0;150.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>160</x>
+      <y>240</y>
+      <w>170</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-&gt;
+m1=1.*
+m2=*.1
+HAS</panel_attributes>
+    <additional_attributes>10.0;20.0;150.0;20.0</additional_attributes>
+  </element>
+</diagram>

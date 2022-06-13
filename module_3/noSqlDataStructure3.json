@@ -1,0 +1,27 @@
+{
+    "book_name": "NoSQL Distilled",
+    "book_isbn": 9780321826626,
+    "book_price": 30.00,
+    
+    "author_info": [
+        {
+            "author_last_name": "Sadalage",
+            "author_first_name": "Pramod",
+            "author_phone": "123-456-7890",
+            "author_email": "pramodsadalage@example.com"
+        },
+
+        {
+            "author_last_name": "Fowler",
+            "author_first_name": "Martin",
+            "author_phone": "987-654-3210",
+            "author_email": "martinfowler@example.com"
+        }
+    ],
+
+    "publisher_info": {
+            "publisher_name": "Pearson Publishing",
+            "publisher_code": "0118 999 881 999 119 725 3",
+            "publisher_address": "80 Strand, London WC2R 0RL, United Kingdom"
+    }
+}
