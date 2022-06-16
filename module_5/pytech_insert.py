@@ -35,4 +35,4 @@ listOfStudents =[
 print("-- INSERT STATEMENTS --")
 for student in listOfStudents:
     new_student_Id = db.students.insert_one(student).inserted_id
-    print(f"Inserted student record {student['first_name']} {student['last_name']} into the students collection with document_id {str(new_student_Id)}")
+    print(f"Inserted student record {student['first_name']} {student['last_name']} into the students collection with document_id {new_student_Id}")
