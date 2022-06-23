@@ -13,7 +13,7 @@ db = client.pytech
 #holds all of the contents of the collection since no arguments are passed
 docs = db.students.find({})
 
-print("-- DISPLAYING STUDENT DOCUMENTS FROM find() QUERY --")
+print("-- DISPLAYING STUDENTS DOCUMENTS FROM find() QUERY --")
 
 #loops through all of the documents retrieved from the find({}) query and displays them nicely formatted
 for doc in docs:
@@ -34,7 +34,7 @@ db.students.update_one(filter, newValue)
 
 #prints out just one student record, the information from the student with a student_id of 1007
 doc = db.students.find_one({"student_id": "1007"})
-print("-- DISPLAYING STUDENT DOCUMENTS FROM find() QUERY --")
+print("-- DISPLAYING UPDATED STUDENT DOCUMENT FROM find_one() QUERY --")
 print(f"Student ID:  {doc['student_id']}")
 print(f"First Name: {doc['first_name']}")
 print(f"Last Name: {doc['last_name']}")
