@@ -1,4 +1,4 @@
-#You can ignore this file.  I used to to reset the original value of student_id 1007 during testing.
+#You can ignore this file.  I used to to reset the original value of student_id 1007 during testing of pytech_update.py
 
 #necessary imports and global variables
 from pymongo import MongoClient
