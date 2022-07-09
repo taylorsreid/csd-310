@@ -1,6 +1,6 @@
 # bacchus
 
-Before being able to run our Python scripts, you will need to run the following commands in MySQL:
+Before being able to run our Python scripts, you will need to run the following commands in MySQL since I am unable to create a database without privileges:
 
 CREATE USER 'bacchus_user'@'localhost' IDENTIFIED BY 'winesnob';
 
