@@ -26,8 +26,14 @@ try:
     db = mysql.connector.connect(**config)
     cursor = db.cursor()
     
-    #
-    cursor.execute("")    
+    #creates the employee table
+    cursor.execute("CREATE TABLE employee(employee_id INT NOT NULL AUTO_INCREMENT, first_name VARCHAR(75) NOT NULL, last_name VARCHAR(75) NOT NULL, PRIMARY KEY(employee_id)")
+
+    #creates a table with a list of suppliers
+    cursor.execute("CREATE TABLE supplier(supplier_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(75) NOT NULL, PRIMARY KEY(supplier_id)")
+
+    #creates a table with a list of supplies
+    cursor.execute("CREATE TABLE supply(supply_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(75) NOT NULL, PRIMARY KEY(supply_id)")
     
     #commits and closes connections
     db.commit()
