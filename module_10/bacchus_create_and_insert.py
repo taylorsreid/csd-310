@@ -21,41 +21,41 @@ config = {
     "raise_on_warnings": True
 }
 
-suppliers = [
-
-    ["Bob's Bottles and Bungs", "Split Bottle", "750mL Bottle", "1.75L Bottle", "Split Cork", "750mL Cork", "1.75L Cork"],
-
-    ["Sean's Shipping Supplies", "Split Label", "750mL Label", "1.75L Label", "Split Box", "750mL Box", "1.75mL Box"],
-
-    ["Victor's Vinting Vitals"]
-]
-
-#supplies = [[]]
-orders = []
-employees = []
-
 try:
     #credentials loaded in and connection created
     db = mysql.connector.connect(**config)
     cursor = db.cursor() 
 
-    #creates a table with a list of suppliers
-    cursor.execute("CREATE TABLE supplier(supplier_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(75) NOT NULL, PRIMARY KEY(supplier_id)")
+    def insertVendor(vendor_name):
+        cursor.execute(f"INSERT INTO vendor(vendor_id, vendor_name) VALUES({vendor_name});")
+
+    def insertSupply(supply_name, supply_price, vendor_id):
+        cursor.execute(f"INSERT INTO supply(supply_name, supply_price, vendor_id) VALUES({supply_name}, {supply_price}, {vendor_id});")
+
+    def insertSupplyOrders(order_date, promised_delivery_date, actual_delivery_date, order_price, vendor_id):
+        cursor.execute(f"INSERT INTO supply_orders(order_date, promised_delivery_date, actual_delivery_date, order_price, vendor_id) VALUES({order_date}, {promised_delivery_date}, {actual_delivery_date}, {order_price}, {vendor_id});")
+
+    def insertEmployee(employee_first_name, employee_last_name, employee_role):
+        cursor.exectue(f"INSERT INTO employee(employee_first_name, employee_last_name, employee_role) VALUES({employee_first_name}, {employee_last_name}, {employee_role});")
+
+
+    #creates a table with a list of vendors
+    cursor.execute("CREATE TABLE vendor(vendor_id INT NOT NULL AUTO_INCREMENT, vendor_name VARCHAR(75) NOT NULL, PRIMARY KEY(vendor_id);")
 
     #creates a table with a list of supplies
-    cursor.execute("CREATE TABLE supply(supply_id INT NOT NULL AUTO_INCREMENT, name VARCHAR(75) NOT NULL, price DECIMAL, supplier_id INT NOT NULL, PRIMARY KEY(supply_id), CONSTRAINT fk_supplier FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id)")
+    cursor.execute("CREATE TABLE supply(supply_id INT NOT NULL AUTO_INCREMENT, supply_name VARCHAR(75) NOT NULL, supply_price DECIMAL, vendor_id INT NOT NULL, PRIMARY KEY(supply_id), CONSTRAINT fk_vendor_id FOREIGN KEY(vendor_id) REFERENCES vendor(vendor_id);")
 
     #creates a table for supply orders
-    cursor.execute("CREATE TABLE supply_orders(order_id INT NOT NULL AUTO_INCREMENT, promised_date DATE NOT NULL, actual_date DATE, suppler_id INT NOT NULL, PRIMARY KEY(order_id), CONSTRAINT fk_supplier FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id)")
+    cursor.execute("CREATE TABLE supply_orders(order_id INT NOT NULL AUTO_INCREMENT, order_date DATE, promised_delivery_date DATE NOT NULL, actual_delivery_date DATE, order_price DECIMAL NOT NULL, vendor_id INT NOT NULL, PRIMARY KEY(order_id), CONSTRAINT fk_vendor_id FOREIGN KEY(vendor_id) REFERENCES vendor(vendor_id);")
 
     #creates the employee table
-    cursor.execute("CREATE TABLE employee(employee_id INT NOT NULL AUTO_INCREMENT, first_name VARCHAR(75) NOT NULL, last_name VARCHAR(75) NOT NULL, PRIMARY KEY(employee_id)")
+    cursor.execute("CREATE TABLE employee(employee_id INT NOT NULL AUTO_INCREMENT, employee_first_name VARCHAR(75) NOT NULL, employee_last_name VARCHAR(75) NOT NULL, employee_role VARCHAR(75) NOT NULL, PRIMARY KEY(employee_id);")
     
     #time to start filling the tables
 
-    #inserts suppliers
+    #inserts vendors
     
-        #cursor.execute(f"INSERT INTO supplier(name) VALUES('{supplier}');")
+        #cursor.execute(f"INSERT INTO vendor(name) VALUES('{vendor}');")
 
     #commits and closes connections
     db.commit()
