@@ -16,6 +16,7 @@ config = {
     "database": "pysports",
     "raise_on_warnings": True
 }
+
 try:
     #credentials loaded in and connection created
     db = mysql.connector.connect(**config)
