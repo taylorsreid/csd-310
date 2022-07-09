@@ -1,36 +1,42 @@
 {
     "supply" : [
         {
+            "supply_id" : 1,
             "supply_name" : "750mL bottle",
             "supply_price" : 2, 
             "vendor_id" : 1
         },
 
         {
+            "supply_id" : 2,
             "supply_name" : "cork",
             "supply_price" : 0.25,
             "vendor_id" : 1
         },
 
         {
+            "supply_id" : 3,
             "supply_name" : "label",
             "supply_price" : 0.10, 
             "vendor_id" : 2
         },
 
         {
+            "supply_id" : 4,
             "supply_name" : "box",
             "supply_price" : 0.30, 
             "vendor_id" : 2
         },
 
         {
+            "supply_id" : 5,
             "supply_name" : "vat",
             "supply_price" : 100, 
             "vendor_id" : 3
         },
 
         {
+            "supply_id" : 6,
             "supply_name" : "tubing",
             "supply_price" : 5, 
             "vendor_id" : 3
@@ -39,17 +45,17 @@
 
     "vendor" : [
         {
-            "vendor_name": "Bob's Bottles and Bungs",
+            "vendor_name": "Bobs Bottles and Bungs",
             "vendor_id" : 1
         },
         
         {
-            "vendor_name": "Sean's Shipping Supplies",
+            "vendor_name": "Seans Shipping Supplies",
             "vendor_id" : 2
         },
         
         {
-            "vendor_name": "Victor's Vinting Vitals",
+            "vendor_name": "Victors Vinting Vitals",
             "vendor_id" : 3
         }
     ],
@@ -59,42 +65,66 @@
             "employee_id": 1,
             "employee_first_name" : "Janet",
             "employee_last_name" : "Collins",
-            "employee_role" : "Finance/Payroll Manager"
+            "employee_role" : "Finance/Payroll Manager",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         },
 
         {
             "employee_id": 2,
             "employee_first_name" : "Roz",
             "employee_last_name" : "Murphy",
-            "employee_role" : "Marketing Manager"
+            "employee_role" : "Marketing Manager",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         },
 
         {
             "employee_id": 3,
             "employee_first_name" : "Bob",
             "employee_last_name" : "Ulrich",
-            "employee_role" : "Marketing Assistant"
+            "employee_role" : "Marketing Assistant",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         },
 
         {
             "employee_id": 4,
             "employee_first_name" : "Henry",
             "employee_last_name" : "Doyle",
-            "employee_role" : "Production Line Manager"
+            "employee_role" : "Production Line Manager",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         },
 
         {
             "employee_id": 5,
             "employee_first_name" : "Maria",
             "employee_last_name" : "Costanza",
-            "employee_role" : "Distribution Manager"
+            "employee_role" : "Distribution Manager",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         },
 
         {
             "employee_id": 6,
             "employee_first_name" : "Jim",
             "employee_last_name" : "Wino",
-            "employee_role" : "Production Line Employee"
+            "employee_role" : "Production Line Employee",
+            "q1_hours" : 0,
+            "q2_hours" : 0,
+            "q3_hours" : 0,
+            "q4_hours" : 0
         }
     ],
 
@@ -215,7 +245,7 @@
         },
 
         {
-            "distributor_name" : "Langston's Liquors",
+            "distributor_name" : "Langstons Liquors",
             "distributor_id" : 4
         },
 
@@ -228,16 +258,5 @@
             "distributor_name" : "Liquor Lovers",
             "distributor_id" : 6
         }
-    ],
-
-    "hours" : [
-        {
-            "employee_id" : 1,
-            "q1" : 456,
-            "q2" : ,
-            "q3" : ,
-            "q4" : 
-        },
     ]
-
 }

@@ -15,17 +15,15 @@ import json
 with open("bacchus.json") as bacchus_json:
     bacchus = json.load(bacchus_json)
 
-print(type(bacchus))
-
-def insertEmployee(employee_id, employee_first_name, employee_last_name, employee_role):
-        cursor.execute(f"INSERT INTO employee(employee_id, employee_first_name, employee_last_name, employee_role) VALUES({employee_first_name}, {employee_last_name}, {employee_role});")
-
 i = 0
-while i < len(bacchus["employee"]):
-    employee_id = bacchus["employee"][i]["employee_id"]
-    employee_first_name = bacchus["employee"][i]["employee_first_name"]
-    employee_last_name = bacchus["employee"][i]["employee_last_name"]
-    employee_role = bacchus["employee"][i]["employee_role"]
-    insertEmployee(employee_id, employee_first_name, employee_last_name, employee_role)
+while i < len(bacchus["vendor"]):
+    vendor_id = bacchus["vendor"][i]["vendor_id"]
+    vendor_name = bacchus["vendor"][i]["vendor_name"]
+
+    print(str(vendor_id) + vendor_name + str(i))
+
+    cursor.execute(f"INSERT INTO vendor(vendor_id, vendor_name) VALUES('{vendor_id}', '{vendor_name}');")
 
     i += 1
+
+db.commit()
