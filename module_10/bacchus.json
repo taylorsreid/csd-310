@@ -56,45 +56,45 @@
 
     "employee" : [
         {
+            "employee_id": 1,
             "employee_first_name" : "Janet",
             "employee_last_name" : "Collins",
-            "employee_role" : "Finance/Payroll Manager",
-            "employee_id": 1
+            "employee_role" : "Finance/Payroll Manager"
         },
 
         {
+            "employee_id": 2,
             "employee_first_name" : "Roz",
             "employee_last_name" : "Murphy",
-            "employee_role" : "Marketing Manager",
-            "employee_id": 2
+            "employee_role" : "Marketing Manager"
         },
 
         {
+            "employee_id": 3,
             "employee_first_name" : "Bob",
             "employee_last_name" : "Ulrich",
-            "employee_role" : "Marketing Assistant",
-            "employee_id": 3
+            "employee_role" : "Marketing Assistant"
         },
 
         {
+            "employee_id": 4,
             "employee_first_name" : "Henry",
             "employee_last_name" : "Doyle",
-            "employee_role" : "Production Line Manager",
-            "employee_id": 4
+            "employee_role" : "Production Line Manager"
         },
 
         {
+            "employee_id": 5,
             "employee_first_name" : "Maria",
             "employee_last_name" : "Costanza",
-            "employee_role" : "Distribution Manager",
-            "employee_id": 5
+            "employee_role" : "Distribution Manager"
         },
 
         {
+            "employee_id": 6,
             "employee_first_name" : "Jim",
             "employee_last_name" : "Wino",
-            "employee_role" : "Production Line Employee",
-            "employee_id": 6
+            "employee_role" : "Production Line Employee"
         }
     ],
 
