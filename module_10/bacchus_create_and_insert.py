@@ -55,9 +55,6 @@ try:
 
     #time to start filling the tables
 
-    
-
-
     #fills the vendor table from the JSON file
     i = 0
     while i < len(bacchus["vendor"]):
