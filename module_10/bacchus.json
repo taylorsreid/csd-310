@@ -228,5 +228,16 @@
             "distributor_name" : "Liquor Lovers",
             "distributor_id" : 6
         }
+    ],
+
+    "hours" : [
+        {
+            "employee_id" : 1,
+            "q1" : 456,
+            "q2" : ,
+            "q3" : ,
+            "q4" : 
+        },
     ]
+
 }
