@@ -6,4 +6,4 @@ CREATE USER 'bacchus_user'@'localhost' IDENTIFIED BY 'winesnob';
 
 CREATE DATABASE bacchus;
 
-GRANT ALL PRIVILEGES ON bacchus.* TO'bacchus_user'@'localhost';
+GRANT ALL PRIVILEGES ON bacchus.* TO 'bacchus_user'@'localhost';
