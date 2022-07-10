@@ -22,7 +22,6 @@ config = {
     "raise_on_warnings": True
 }
 
-
 #the python script would be incredibly long and messy if I put all of the values to insert into it
 #instead I put them into a JSON file
 try:
