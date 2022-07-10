@@ -40,6 +40,7 @@ try:
     print("\nConnected to MySQL Database.")
 
     print("\nCreating tables:")
+
     #creates a table with a list of vendors
     cursor.execute("CREATE TABLE vendor(vendor_id INT NOT NULL, vendor_name VARCHAR(75) NOT NULL, PRIMARY KEY(vendor_id));")
     print("\tvendor")
@@ -142,7 +143,7 @@ try:
     db.commit()
     db.close()
     
-    #holds the command line open
+    #holds the command line open for viewing
     print(f"\nSuccessfully comitted to {config['database']} database!")
     input("Press enter to continue...")
 
