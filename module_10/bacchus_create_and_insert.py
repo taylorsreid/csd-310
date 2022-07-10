@@ -22,10 +22,9 @@ config = {
     "raise_on_warnings": True
 }
 
-'''
-the python script would be incredibly long and messy if I put all of the values to insert into it
-instead I put them into a JSON file
-'''
+
+#the python script would be incredibly long and messy if I put all of the values to insert into it
+#instead I put them into a JSON file
 try:
     with open("bacchus.json") as bacchus_json:
         bacchus = json.load(bacchus_json)
