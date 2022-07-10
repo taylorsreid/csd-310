@@ -1,3 +1,8 @@
+'''
+IGNORE THIS FILE
+IT'S JUST FOR TESTING SNIPPETS OF CODE
+'''
+
 import mysql.connector
 
 config = {
