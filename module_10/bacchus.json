@@ -66,10 +66,10 @@
             "employee_first_name" : "Janet",
             "employee_last_name" : "Collins",
             "employee_role" : "Finance/Payroll Manager",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 456,
+            "q2_hours" : 483,
+            "q3_hours" : 459,
+            "q4_hours" : 489
         },
 
         {
@@ -77,10 +77,10 @@
             "employee_first_name" : "Roz",
             "employee_last_name" : "Murphy",
             "employee_role" : "Marketing Manager",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 476,
+            "q2_hours" : 483,
+            "q3_hours" : 458,
+            "q4_hours" : 461
         },
 
         {
@@ -88,10 +88,10 @@
             "employee_first_name" : "Bob",
             "employee_last_name" : "Ulrich",
             "employee_role" : "Marketing Assistant",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 456,
+            "q2_hours" : 463,
+            "q3_hours" : 448,
+            "q4_hours" : 451
         },
 
         {
@@ -99,10 +99,10 @@
             "employee_first_name" : "Henry",
             "employee_last_name" : "Doyle",
             "employee_role" : "Production Line Manager",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 469,
+            "q2_hours" : 478,
+            "q3_hours" : 455,
+            "q4_hours" : 463
         },
 
         {
@@ -110,10 +110,10 @@
             "employee_first_name" : "Maria",
             "employee_last_name" : "Costanza",
             "employee_role" : "Distribution Manager",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 467,
+            "q2_hours" : 458,
+            "q3_hours" : 470,
+            "q4_hours" : 482
         },
 
         {
@@ -121,10 +121,10 @@
             "employee_first_name" : "Jim",
             "employee_last_name" : "Wino",
             "employee_role" : "Production Line Employee",
-            "q1_hours" : 0,
-            "q2_hours" : 0,
-            "q3_hours" : 0,
-            "q4_hours" : 0
+            "q1_hours" : 453,
+            "q2_hours" : 462,
+            "q3_hours" : 471,
+            "q4_hours" : 451
         }
     ],
 
