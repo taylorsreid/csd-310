@@ -11,7 +11,7 @@ Module 11.1
 #library imports
 import mysql.connector
 from mysql.connector import errorcode
-#import datetime
+import datetime
 
 #credentials configuration
 config = {
@@ -37,42 +37,56 @@ except mysql.connector.Error as err:
     else:
         print(err)
 
-
-
-try:
-    cursor.execute(f"""CREATE VIEW supply_overdue AS 
-                       SELECT order_date, promised_delivery_date, actual_delivery_date, supply_order.vendor_id, vendor_name 
-                       FROM supply_order 
-                       INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
-                       WHERE actual_delivery_date > promised_delivery_date;
-                    """)
-    print("supply_overdue view created\n")
-except:
-    print("supply_overdue view already exists, continuing...\n")
-
-#returns a count of how many overdue supply orders there are
-def getCountOverdue():
-    cursor.execute("SELECT COUNT(*) FROM supply_overdue;")
-    return cursor.fetchall()
-
 #writes a csv file of overdue orders
-def overdueCsv():
+def writeCsv():
     pass
 
+def supplyOverdue():
 
-supply_overdue = "SELECT * FROM supply_overdue"
+    #welcome message that also asks if the user wants a copy of the report in CSV format too
+    print("This report will show all overdue supply shipments in the database.")
+    yn = input("Do you wish to generate a CSV file as well? [y/n]").lower()
+    
+    #creates a view of overdue supply shipments that is easier to work with later on
+    try:
+        cursor.execute(f"""CREATE VIEW supply_overdue AS 
+                           SELECT order_date, promised_delivery_date, actual_delivery_date, vendor_name 
+                           FROM supply_order 
+                           INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
+                           WHERE actual_delivery_date > promised_delivery_date;
+                        """)
+        print("supply_overdue view created\n")
+    except:
+        print("supply_overdue view already exists, continuing...\n")
 
-cursor.execute(supply_overdue)
-results = cursor.fetchall()
+    #pulls the view
+    cursor.execute("SELECT * FROM supply_overdue;")
+    orders = cursor.fetchall()
 
-#order_date = results[0][0]
-#print(order_date.year)
+    #formatting string for dates
+    format = "%B %d, %Y"
+
+    #
+    for order in orders:
+        vendorName = order[0]
+        orderDate = order[0].strftime(format)
+        promisedDate = order[1].strftime(format)
+        actualDate = order[2].strftime(format)
+        daysOverdue = order[2] - order[1]
+
+        print(f"Vendor Name         : {vendorName}")
+        print(f"Order Date          : {orderDate}")
+        print(f"Promised Date       : {promisedDate}")
+        print(f"Actual Delivery Date: {actualDate}")
+        print(f"Days Overdue        : {daysOverdue}")
+        print()
 
 
-for result in results:
-    print(f"Ordered date: {result[0].month}/{result[0].day}/{result[0].year}")
 
+#MAIN
+supplyOverdue()
+#/MAIN
 
 #closes connection and holds the command line open for viewing
 db.close()
-input("Press enter to continue...")
+#input("Press enter to continue...")
