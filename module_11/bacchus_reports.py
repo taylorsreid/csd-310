@@ -37,19 +37,32 @@ except mysql.connector.Error as err:
     else:
         print(err)
 
+
+
+try:
+    cursor.execute(f"""CREATE VIEW supply_overdue AS 
+                       SELECT order_date, promised_delivery_date, actual_delivery_date, supply_order.vendor_id, vendor_name 
+                       FROM supply_order 
+                       INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
+                       WHERE actual_delivery_date > promised_delivery_date;
+                    """)
+    print("supply_overdue view created\n")
+except:
+    print("supply_overdue view already exists, continuing...\n")
+
+#returns a count of how many overdue supply orders there are
+def getCountOverdue():
+    cursor.execute("SELECT COUNT(*) FROM supply_overdue;")
+    return cursor.fetchall()
+
 #writes a csv file of overdue orders
 def overdueCsv():
     pass
 
-overdueSql = """
-    SELECT order_date, promised_delivery_date, actual_delivery_date, supply_order.vendor_id, vendor_name 
-    FROM supply_order 
-    INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
-    WHERE actual_delivery_date > promised_delivery_date;
-"""
 
+supply_overdue = "SELECT * FROM supply_overdue"
 
-cursor.execute(overdueSql)
+cursor.execute(supply_overdue)
 results = cursor.fetchall()
 
 #order_date = results[0][0]
