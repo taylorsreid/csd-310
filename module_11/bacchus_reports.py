@@ -12,7 +12,7 @@ Module 11.1
 import mysql.connector
 from mysql.connector import errorcode
 from os import system, name
-import pandas
+
 
 #credentials configuration
 config = {
@@ -146,6 +146,7 @@ def getMaxMin(usrWineInput, usrAscOrDesc):
 
 # 
 def winesSold():
+    import pandas
     
     cursor.execute("SHOW COLUMNS FROM bacchus.sales;")
     results = cursor.fetchall()
