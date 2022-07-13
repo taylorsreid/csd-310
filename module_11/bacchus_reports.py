@@ -147,32 +147,19 @@ def getMaxMin(usrWineInput, usrAscOrDesc):
 # 
 def winesSold():
     import pandas
-    
-    cursor.execute("SHOW COLUMNS FROM bacchus.sales;")
-    results = cursor.fetchall()
-    wineNames = []
-    for result in results:
-    #    print(result[0])
-        wineNames.append(result[0])
-    print(wineNames)
-
-    #print("The following wines are currently being sold.  Please enter the name of the wine that you would like to see the report for: ") 
-    #i = 1
-    #while i < len(results):
-    #   print(results[i][0])
-    #   wineNames.append(results[i][0])
-    #   i += 1
 
     allQuery = f"""
-                SELECT * FROM sales
+                SELECT distributor_name, merlot, cabernet, chablis, chardonnay FROM sales
                 INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
                 ORDER BY sales.distributor_id ASC
                 """
 
     cursor.execute(allQuery)
     results = cursor.fetchall()
-    #print(results)
     df = pandas.DataFrame(results)
+    df.columns = ["Distributor Name", "Merlot", "Cabernet", "Chablis", "Chardonnay"]
+
+
     print(df)
 
     # 
