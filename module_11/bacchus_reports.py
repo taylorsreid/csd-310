@@ -12,6 +12,7 @@ Module 11.1
 import mysql.connector
 from mysql.connector import errorcode
 from os import system, name
+import pandas
 
 #credentials configuration
 config = {
@@ -127,14 +128,21 @@ def supplyOverdue():
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
 
+'''
 # 
-def getMaxMin(maxOrMin, wineName):
-    maxMinQuery = f"""SELECT MAX(merlot), distributor_name
-                      FROM sales
-                      INNER JOIN distributor
-                      ON sales.distributor_id = distributor.distributor_id;
-                   """
+def getMaxMin(usrWineInput, usrAscOrDesc):
 
+    
+
+    maxMinQuery = f"""
+                    SELECT {usrWineInput}, distributor_name FROM sales 
+                    INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                    ORDER BY {usrWineInput} {usrAscOrDesc} LIMIT 1;
+                   """
+    cursor.execute(maxMinQuery)
+    results = cursor.fetchall()
+    print(results)
+'''
 
 # 
 def winesSold():
@@ -142,18 +150,29 @@ def winesSold():
     cursor.execute("SHOW COLUMNS FROM bacchus.sales;")
     results = cursor.fetchall()
     wineNames = []
-    #for result in results:
+    for result in results:
     #    print(result[0])
-     
-    i = 1
-    while i < len(results):
-        print(results[i][0])
-        wineNames.append(results[i][0])
-        i += 1
+        wineNames.append(result[0])
+    print(wineNames)
 
+    #print("The following wines are currently being sold.  Please enter the name of the wine that you would like to see the report for: ") 
+    #i = 1
+    #while i < len(results):
+    #   print(results[i][0])
+    #   wineNames.append(results[i][0])
+    #   i += 1
 
+    allQuery = f"""
+                SELECT * FROM sales
+                INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                ORDER BY sales.distributor_id ASC
+                """
 
-
+    cursor.execute(allQuery)
+    results = cursor.fetchall()
+    #print(results)
+    df = pandas.DataFrame(results)
+    print(df)
 
     # 
     
@@ -181,6 +200,7 @@ while masterControl:
         clearScreen()
         winesSold()
     elif selection == "3":
+        clearScreen()
         pass
     elif selection == "4":
         clearScreen()
