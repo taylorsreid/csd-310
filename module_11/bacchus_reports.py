@@ -39,7 +39,7 @@ except mysql.connector.Error as err:
 
 ##################################################################################################
 
-#clears the screen and makes everythin look pretty
+#clears the screen and makes everything look pretty
 def clearScreen():
     try:
         # for windows
@@ -58,9 +58,11 @@ def createCsv(csvFileName, header):
 #writes a csv file of overdue orders
 def writeCsv(csvFileName, line):
     with open(csvFileName, "a") as file:
-        for item in line:
-           file.write(str(item) + ", ")
-        file.write("\n")
+        i = 0
+        while i < (len(line) - 1):
+            file.write(str(line[i]) + ", ")
+            i += 1
+        file.write(str(line[-1]) + "\n")
 
 def supplyOverdue():
 
@@ -80,7 +82,7 @@ def supplyOverdue():
                            WHERE actual_delivery_date > promised_delivery_date;
                         """)
     except:
-        #I want this exception to pass silently
+        #I intentionally want this exception to pass silently
         pass
 
     #pulls the view
@@ -103,6 +105,7 @@ def supplyOverdue():
         promisedDate = order[1]
         actualDate = order[2]
         daysOverdue = order[2] - order[1]
+        daysOverdue = daysOverdue.days
 
         #
         print()
@@ -114,7 +117,8 @@ def supplyOverdue():
 
         #
         if yn == "y":
-            writeCsv(csvFileName, [vendorName, orderDate, promisedDate, actualDate, daysOverdue])
+            line = [vendorName, orderDate, promisedDate, actualDate, daysOverdue]
+            writeCsv(csvFileName, line)
 
     #
     if yn == "y":
@@ -123,21 +127,58 @@ def supplyOverdue():
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
 
-def winesSold():
-    pass
+# 
+def getMaxMin(maxOrMin, wineName):
+    maxMinQuery = f"""SELECT MAX(merlot), distributor_name
+                      FROM sales
+                      INNER JOIN distributor
+                      ON sales.distributor_id = distributor.distributor_id;
+                   """
 
-#MAIN
+
+# 
+def winesSold():
+    
+    cursor.execute("SHOW COLUMNS FROM bacchus.sales;")
+    results = cursor.fetchall()
+    wineNames = []
+    #for result in results:
+    #    print(result[0])
+     
+    i = 1
+    while i < len(results):
+        print(results[i][0])
+        wineNames.append(results[i][0])
+        i += 1
+
+
+
+
+
+    # 
+    
+    
+    #holds the command line open for viewing the report
+    input("\nPress enter to exit to the main menu...")
+
+########## BEGIN MAIN METHOD ##########
+#
 masterControl = True
+#
 while masterControl:
+
+    #
     clearScreen()
     print("Welcome to Bacchus Business Reports!")
     print("\n1 - Overdue Supply Orders\n\n2 - Wines Sold Report\n\n3 - SOMETHING ELSE\n\n4 - Exit\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
+    #
     if selection == "1":
         clearScreen()
         supplyOverdue()
     elif selection == "2":
+        clearScreen()
         winesSold()
     elif selection == "3":
         pass
@@ -145,7 +186,7 @@ while masterControl:
         clearScreen()
         print("Goodbye!")
         masterControl = False
-#/MAIN
+########## END MAIN METHOD ##########
 
 #closes connection and holds the command line open for viewing
 db.close()
