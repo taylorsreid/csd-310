@@ -11,7 +11,7 @@ Module 11.1
 #library imports
 import mysql.connector
 from mysql.connector import errorcode
-import datetime
+from os import system, name
 
 #credentials configuration
 config = {
@@ -37,15 +37,39 @@ except mysql.connector.Error as err:
     else:
         print(err)
 
+##################################################################################################
+
+#clears the screen and makes everythin look pretty
+def clearScreen():
+    try:
+        # for windows
+        if name == 'nt':
+            _ = system('cls')
+        # for mac and linux(here, os.name is 'posix')
+        else:
+            _ = system('clear')
+    except:
+        pass
+
+def createCsv(csvFileName, header):
+    with open(csvFileName, "w") as file:
+        file.write(header + "\n")
+
 #writes a csv file of overdue orders
-def writeCsv():
-    pass
+def writeCsv(csvFileName, line):
+    with open(csvFileName, "a") as file:
+        for item in line:
+           file.write(str(item) + ", ")
+        file.write("\n")
 
 def supplyOverdue():
 
+    #
+    csvFileName = "Overdue_Supplies.csv"
+
     #welcome message that also asks if the user wants a copy of the report in CSV format too
     print("This report will show all overdue supply shipments in the database.")
-    yn = input("Do you wish to generate a CSV file as well? [y/n]").lower()
+    yn = input("Do you wish to generate a CSV file as well? [y/n]:  ").lower()
     
     #creates a view of overdue supply shipments that is easier to work with later on
     try:
@@ -55,38 +79,73 @@ def supplyOverdue():
                            INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
                            WHERE actual_delivery_date > promised_delivery_date;
                         """)
-        print("supply_overdue view created\n")
     except:
-        print("supply_overdue view already exists, continuing...\n")
+        #I want this exception to pass silently
+        pass
 
     #pulls the view
     cursor.execute("SELECT * FROM supply_overdue;")
     orders = cursor.fetchall()
 
     #formatting string for dates
-    format = "%B %d, %Y"
+    dateFormat = "%B %d, %Y"
+
+    #
+    if yn == "y":
+        createCsv(csvFileName, "VENDOR NAME, ORDER DATE, PROMISED DATE, ACTUAL DELIVERY DATE, DAYS OVERDUE")
 
     #
     for order in orders:
-        vendorName = order[0]
-        orderDate = order[0].strftime(format)
-        promisedDate = order[1].strftime(format)
-        actualDate = order[2].strftime(format)
+
+        #
+        vendorName = order[3]
+        orderDate = order[0]
+        promisedDate = order[1]
+        actualDate = order[2]
         daysOverdue = order[2] - order[1]
 
-        print(f"Vendor Name         : {vendorName}")
-        print(f"Order Date          : {orderDate}")
-        print(f"Promised Date       : {promisedDate}")
-        print(f"Actual Delivery Date: {actualDate}")
-        print(f"Days Overdue        : {daysOverdue}")
+        #
         print()
+        print(f"Vendor Name         : {vendorName}")
+        print(f"Order Date          : {orderDate.strftime(dateFormat)}")
+        print(f"Promised Date       : {promisedDate.strftime(dateFormat)}")
+        print(f"Actual Delivery Date: {actualDate.strftime(dateFormat)}")
+        print(f"Days Overdue        : {daysOverdue}")
 
+        #
+        if yn == "y":
+            writeCsv(csvFileName, [vendorName, orderDate, promisedDate, actualDate, daysOverdue])
 
+    #
+    if yn == "y":
+        print(f"\nCSV file written to {csvFileName} in the same directory as this program.")
+
+    #holds the command line open for viewing the report
+    input("\nPress enter to exit to the main menu...")
+
+def winesSold():
+    pass
 
 #MAIN
-supplyOverdue()
+masterControl = True
+while masterControl:
+    clearScreen()
+    print("Welcome to Bacchus Business Reports!")
+    print("\n1 - Overdue Supply Orders\n\n2 - Wines Sold Report\n\n3 - SOMETHING ELSE\n\n4 - Exit\n")
+    selection = input("Please enter the corresponding number of your selection:  ")
+
+    if selection == "1":
+        clearScreen()
+        supplyOverdue()
+    elif selection == "2":
+        winesSold()
+    elif selection == "3":
+        pass
+    elif selection == "4":
+        clearScreen()
+        print("Goodbye!")
+        masterControl = False
 #/MAIN
 
 #closes connection and holds the command line open for viewing
 db.close()
-#input("Press enter to continue...")
