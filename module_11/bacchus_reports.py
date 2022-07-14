@@ -65,6 +65,8 @@ def writeCsv(csvFileName, line):
             i += 1
         file.write(str(line[-1]) + "\n")
 
+
+
 def supplyOverdue():
 
     #
@@ -128,47 +130,70 @@ def supplyOverdue():
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
 
-'''
-# 
-def getMaxMin(usrWineInput, usrAscOrDesc):
-
-    
-
-    maxMinQuery = f"""
-                    SELECT {usrWineInput}, distributor_name FROM sales 
-                    INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
-                    ORDER BY {usrWineInput} {usrAscOrDesc} LIMIT 1;
-                   """
-    cursor.execute(maxMinQuery)
-    results = cursor.fetchall()
-    print(results)
-'''
-
 # 
 def winesSold():
-    import pandas
 
-    allQuery = f"""
-                SELECT distributor_name, merlot, cabernet, chablis, chardonnay FROM sales
-                INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
-                ORDER BY sales.distributor_id ASC
-                """
-
-    cursor.execute(allQuery)
-    results = cursor.fetchall()
-    df = pandas.DataFrame(results)
-    df.columns = ["Distributor Name", "Merlot", "Cabernet", "Chablis", "Chardonnay"]
-
-
-    print(df)
-
-    # 
+    try:
+        #creates a view of sales numbers by wine and distributor for easier use later on
+        cursor.execute(f"""
+                        CREATE VIEW sales_all AS
+                        SELECT sales.distributor_id, distributor_name, merlot, cabernet, chablis, chardonnay FROM sales
+                        INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                        ORDER BY sales.distributor_id ASC;
+                        """)        
     
+    except:
+        #I intentionally want this exception to pass silently
+        pass
+
+    #in case the user didn't install pandas as instructed
+    try:
+        import pandas
+
+        #gets the entire view, puts it into a pandas data frame, and adds column names
+        cursor.execute("SELECT * FROM sales_all;")
+        results = cursor.fetchall()
+        df = pandas.DataFrame(results)
+
+        #TODO MAKE THIS SCALABLE BY SHOWING COLUMNS
+        df.columns = ["Distributor ID", "Distributor Name", "merlot", "cabernet", "chablis", "chardonnay"]
+
+        
+        print("\n\t\t\t\t--- ALL SALES ---\n")
+        
+        #this will be the last row of our dataframe, it's appended later
+        totalByWine = ["", "TOTAL:"]
+        
+        #
+        i = 2
+        while i < len(df.columns):
+            cursor.execute(f"""
+                            SELECT SUM({df.columns[i]})
+                            FROM sales_all
+                            """)
+            results = cursor.fetchall()
+            totalByWine.append(int(results[0][0]))
+            i += 1
+
+        df.loc[len(df.index)] = ["", "-" * 17, "----", "----", "----", "----",]
+        df.loc[len(df.index)] = totalByWine
+        print(df.to_string(index=False))
+
+        
+
+
+    except ImportError as err:
+        print(err)
+        print("\nYou need to run \"pip install pandas\" to view this report!")
     
+    except Exception as err:
+        print(err)
+
+ 
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
 
-########## BEGIN MAIN METHOD ##########
+#################### BEGIN MAIN METHOD ####################
 #
 masterControl = True
 #
@@ -177,7 +202,7 @@ while masterControl:
     #
     clearScreen()
     print("Welcome to Bacchus Business Reports!")
-    print("\n1 - Overdue Supply Orders\n\n2 - Wines Sold Report\n\n3 - SOMETHING ELSE\n\n4 - Exit\n")
+    print("\n1 - Late Supply Orders\n\n2 - Wines Sold Report\n\n3 - SOMETHING ELSE\n\n4 - Exit\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
     #
@@ -194,7 +219,7 @@ while masterControl:
         clearScreen()
         print("Goodbye!")
         masterControl = False
-########## END MAIN METHOD ##########
+#################### END MAIN METHOD ####################
 
 #closes connection and holds the command line open for viewing
 db.close()
