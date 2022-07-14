@@ -168,10 +168,13 @@ def pdTable(tableName, dfTitle):
         print(df.to_string(index=False))
 
         #asks if the user wants a copy of the report in CSV format too
-        yn = input("\nDo you wish to generate a CSV file of the report as well? [y/n]:  ").lower()
-        if yn == "y":
+        xchn = input("\nDo you wish to generate a CSV or HTML copy of the report?  Or none? [c/h/n]:  ").lower()
+        if xchn == "c":
             df.to_csv(f"{dfTitle}.csv", index=False)
-            print(f"\nCSV file written to {dfTitle} in the same directory as this program.")
+            print(f"\nCSV file written to {dfTitle}.csv in the same directory as this program.")
+        elif xchn == "h":
+            df.to_html(f"{dfTitle}.html", index=False)
+            print(f"\nHTML file written to {dfTitle}.html in the same directory as this program.")
 
     except ImportError as err:
         print(err)
