@@ -9,6 +9,7 @@ Module 11.1
 '''
 
 #library imports
+from re import I
 import mysql.connector
 from mysql.connector import errorcode
 from os import system, name
@@ -65,7 +66,16 @@ def writeCsv(csvFileName, line):
             i += 1
         file.write(str(line[-1]) + "\n")
 
-
+#gets and returns column names
+def getColumnNames(viewName):
+    cursor.execute(f"SHOW COLUMNS FROM {viewName};")
+    results = cursor.fetchall()
+    columnNames = []
+    i = 0
+    while i < len(results):
+        columnNames.append(results[i][0])
+        i += 1
+    return columnNames
 
 def supplyOverdue():
 
@@ -131,17 +141,27 @@ def supplyOverdue():
     input("\nPress enter to exit to the main menu...")
 
 # 
-def winesSold():
+def pdTable(viewName, dfTitle, startIndex):
 
     try:
-        #creates a view of sales numbers by wine and distributor for easier use later on
-        cursor.execute(f"""
-                        CREATE VIEW sales_all AS
-                        SELECT sales.distributor_id, distributor_name, merlot, cabernet, chablis, chardonnay FROM sales
-                        INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
-                        ORDER BY sales.distributor_id ASC;
-                        """)        
-    
+        
+        if viewName == "sales_all":
+            #creates a view of sales numbers by wine and distributor for easier use later on
+            cursor.execute(f"""
+                            CREATE VIEW {viewName} AS
+                            SELECT sales.distributor_id, distributor_name, merlot, cabernet, chablis, chardonnay FROM sales
+                            INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                            ORDER BY sales.distributor_id ASC;
+                            """)        
+        
+        elif viewName == "hours_all":
+            #
+            cursor.execute(f"""
+                            CREATE VIEW {viewName} AS
+                            SELECT * FROM employee
+                            ORDER BY employee_id ASC;
+                            """)
+
     except:
         #I intentionally want this exception to pass silently
         pass
@@ -150,33 +170,52 @@ def winesSold():
     try:
         import pandas
 
-        #gets the entire view, puts it into a pandas data frame, and adds column names
-        cursor.execute("SELECT * FROM sales_all;")
+        #gets the entire SQL view, puts it into a pandas data frame
+        cursor.execute(f"SELECT * FROM {viewName};")
         results = cursor.fetchall()
         df = pandas.DataFrame(results)
 
-        #TODO MAKE THIS SCALABLE BY SHOWING COLUMNS
-        df.columns = ["Distributor ID", "Distributor Name", "merlot", "cabernet", "chablis", "chardonnay"]
+        #assigns the dataframe columns names to the same as the column names in the view
+        df.columns = getColumnNames(f"{viewName}")
 
+        #creates the last row of our dataframe, appends enough blank cells to make them line up with the others by using a loop and the startIndex
+        lastRow = []
+        i = 1
+        while i < startIndex:
+            lastRow.append("")
+            i += 1
+        lastRow.append("TOTAL:")
         
-        print("\n\t\t\t\t--- ALL SALES ---\n")
-        
-        #this will be the last row of our dataframe, it's appended later
-        totalByWine = ["", "TOTAL:"]
-        
-        #
-        i = 2
+        #appends the sum of the columns to lastRow
+        i = startIndex
         while i < len(df.columns):
             cursor.execute(f"""
                             SELECT SUM({df.columns[i]})
-                            FROM sales_all
+                            FROM {viewName}
                             """)
             results = cursor.fetchall()
-            totalByWine.append(int(results[0][0]))
+            lastRow.append(int(results[0][0]))
             i += 1
 
-        df.loc[len(df.index)] = ["", "-" * 17, "----", "----", "----", "----",]
-        df.loc[len(df.index)] = totalByWine
+        #both exactly what they sound like
+        horizontalDivider = []
+        verticalDivider = []
+
+        i = 0
+        while i < len(df.columns):
+            if i < startIndex:
+                horizontalDivider.append("")
+            else:
+                horizontalDivider.append("----")
+            i += 1
+
+        df.loc[len(df.index)] = horizontalDivider
+        
+        #appends lastRow to the dataframe
+        df.loc[len(df.index)] = lastRow
+        
+        #finally, we get to print the title of the report and the actual dataframe
+        print(f"\n\t\t\t\t--- {dfTitle} ---\n")
         print(df.to_string(index=False))
 
         
@@ -188,7 +227,6 @@ def winesSold():
     
     except Exception as err:
         print(err)
-
  
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
@@ -202,7 +240,7 @@ while masterControl:
     #
     clearScreen()
     print("Welcome to Bacchus Business Reports!")
-    print("\n1 - Late Supply Orders\n\n2 - Wines Sold Report\n\n3 - SOMETHING ELSE\n\n4 - Exit\n")
+    print("\n1 - Late Supply Orders Report\n\n2 - Wines Sold Report\n\n3 - Employee Quarterly Hours Report\n\n4 - Exit\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
     #
@@ -211,10 +249,10 @@ while masterControl:
         supplyOverdue()
     elif selection == "2":
         clearScreen()
-        winesSold()
+        pdTable("sales_all", "ALL SALES", 2)
     elif selection == "3":
         clearScreen()
-        pass
+        pdTable("hours_all", "ALL EMPLOYEE HOURS", 4)
     elif selection == "4":
         clearScreen()
         print("Goodbye!")
