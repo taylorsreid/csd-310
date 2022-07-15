@@ -1,0 +1,262 @@
+{
+    "supply" : [
+        {
+            "supply_id" : 1,
+            "supply_name" : "750mL bottle",
+            "supply_price" : 2, 
+            "vendor_id" : 1
+        },
+
+        {
+            "supply_id" : 2,
+            "supply_name" : "cork",
+            "supply_price" : 0.25,
+            "vendor_id" : 1
+        },
+
+        {
+            "supply_id" : 3,
+            "supply_name" : "label",
+            "supply_price" : 0.10, 
+            "vendor_id" : 2
+        },
+
+        {
+            "supply_id" : 4,
+            "supply_name" : "box",
+            "supply_price" : 0.30, 
+            "vendor_id" : 2
+        },
+
+        {
+            "supply_id" : 5,
+            "supply_name" : "vat",
+            "supply_price" : 100, 
+            "vendor_id" : 3
+        },
+
+        {
+            "supply_id" : 6,
+            "supply_name" : "tubing",
+            "supply_price" : 5, 
+            "vendor_id" : 3
+        }
+    ],
+
+    "vendor" : [
+        {
+            "vendor_name": "Bobs Bottles and Bungs",
+            "vendor_id" : 1
+        },
+        
+        {
+            "vendor_name": "Seans Shipping Supplies",
+            "vendor_id" : 2
+        },
+        
+        {
+            "vendor_name": "Victors Vinting Vitals",
+            "vendor_id" : 3
+        }
+    ],
+
+    "employee" : [
+        {
+            "employee_id": 1,
+            "employee_first_name" : "Janet",
+            "employee_last_name" : "Collins",
+            "employee_role" : "Finance/Payroll Manager",
+            "q1_hours" : 456,
+            "q2_hours" : 483,
+            "q3_hours" : 459,
+            "q4_hours" : 489
+        },
+
+        {
+            "employee_id": 2,
+            "employee_first_name" : "Roz",
+            "employee_last_name" : "Murphy",
+            "employee_role" : "Marketing Manager",
+            "q1_hours" : 476,
+            "q2_hours" : 483,
+            "q3_hours" : 458,
+            "q4_hours" : 461
+        },
+
+        {
+            "employee_id": 3,
+            "employee_first_name" : "Bob",
+            "employee_last_name" : "Ulrich",
+            "employee_role" : "Marketing Assistant",
+            "q1_hours" : 456,
+            "q2_hours" : 463,
+            "q3_hours" : 448,
+            "q4_hours" : 451
+        },
+
+        {
+            "employee_id": 4,
+            "employee_first_name" : "Henry",
+            "employee_last_name" : "Doyle",
+            "employee_role" : "Production Line Manager",
+            "q1_hours" : 469,
+            "q2_hours" : 478,
+            "q3_hours" : 455,
+            "q4_hours" : 463
+        },
+
+        {
+            "employee_id": 5,
+            "employee_first_name" : "Maria",
+            "employee_last_name" : "Costanza",
+            "employee_role" : "Distribution Manager",
+            "q1_hours" : 467,
+            "q2_hours" : 458,
+            "q3_hours" : 470,
+            "q4_hours" : 482
+        },
+
+        {
+            "employee_id": 6,
+            "employee_first_name" : "Jim",
+            "employee_last_name" : "Wino",
+            "employee_role" : "Production Line Employee",
+            "q1_hours" : 453,
+            "q2_hours" : 462,
+            "q3_hours" : 471,
+            "q4_hours" : 451
+        }
+    ],
+
+    "supply_order" : [
+        {
+            "order_date" : "2021-08-05",
+            "promised_delivery_date" : "2021-08-14",
+            "actual_delivery_date" : "2021-08-15",
+            "order_price" : 123.04,
+            "vendor_id" : 1
+        },
+
+        {
+            "order_date" : "2021-09-05",
+            "promised_delivery_date" : "2021-09-14",
+            "actual_delivery_date" : "2021-09-12",
+            "order_price" : 110.93,
+            "vendor_id" : 1
+        },
+
+        {
+            "order_date" : "2021-08-04",
+            "promised_delivery_date" : "2021-08-11",
+            "actual_delivery_date" : "2021-08-09",
+            "order_price" : 98.34,
+            "vendor_id" : 2 
+        },
+
+        {
+            "order_date" : "2021-09-07",
+            "promised_delivery_date" : "2021-09-14",
+            "actual_delivery_date" : "2021-09-10",
+            "order_price" : 101.68,
+            "vendor_id" : 2
+        },
+
+        {
+            "order_date" : "2021-08-14",
+            "promised_delivery_date" : "2021-08-21",
+            "actual_delivery_date" : "2021-09-21",
+            "order_price" : 225,
+            "vendor_id" : 3
+        },
+
+        {
+            "order_date" : "2021-09-30",
+            "promised_delivery_date" : "2021-10-13",
+            "actual_delivery_date" : "2021-10-30",
+            "order_price" : 115,
+            "vendor_id" : 3
+        }
+    ],
+
+    "sales" : [
+        {
+            "distributor_id" : 1,
+            "merlot" : 208,
+            "cabernet" : 432,
+            "chablis" : 110,
+            "chardonnay" : 352
+        },
+
+        {
+            "distributor_id" : 2,
+            "merlot" : 196,
+            "cabernet" : 413,
+            "chablis" : 105,
+            "chardonnay" : 325
+        },
+
+        {
+            "distributor_id" : 3,
+            "merlot" : 220,
+            "cabernet" : 458,
+            "chablis" : 102,
+            "chardonnay" : 330
+        },
+
+        {
+            "distributor_id" : 4,
+            "merlot" : 235,
+            "cabernet" : 467,
+            "chablis" : 99,
+            "chardonnay" : 328
+        },
+
+        {
+            "distributor_id" : 5,
+            "merlot" : 229,
+            "cabernet" : 470,
+            "chablis" : 101,
+            "chardonnay" : 317
+        },
+
+        {
+            "distributor_id" : 6,
+            "merlot" : 237,
+            "cabernet" : 485,
+            "chablis" : 104,
+            "chardonnay" : 321
+        }
+    ],
+
+    "distributor" : [
+        {
+            "distributor_name" : "Wine Harder",
+            "distributor_id" : 1
+        },
+
+        {
+            "distributor_name" : "Wines-R-Us",
+            "distributor_id" : 2
+        },
+
+        {
+            "distributor_name" : "Winers Warehouse",
+            "distributor_id" : 3
+        },
+
+        {
+            "distributor_name" : "Langstons Liquors",
+            "distributor_id" : 4
+        },
+
+        {    
+            "distributor_name" : "Booze Warehouse",
+            "distributor_id" : 5
+        },
+
+        {
+            "distributor_name" : "Liquor Lovers",
+            "distributor_id" : 6
+        }
+    ]
+}
