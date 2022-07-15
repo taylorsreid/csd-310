@@ -54,7 +54,7 @@ def getColumnNames(tableName):
 def supplyOverdue(reportTitle):
 
     #asks if the user wants a copy of the report in CSV format too
-    yn = input("\nDo you wish to generate a CSV file of the report as well? [y/n]:  ").lower()
+    yn = input("Do you wish to generate a CSV file of the report as well? [y/n]:  ").lower()
     
     clearScreen()
 
@@ -116,14 +116,54 @@ def pdTable(tableName, dfTitle):
         df = pandas.DataFrame(cursor.fetchall())
         
         #retrieves names of columns from MySQL and sets the dataframe's to match
-        df.columns = getColumnNames(tableName)
+        columnNames = getColumnNames(tableName)
+        df.columns = columnNames
 
-        #formatting to make the dataframe look pretty
-        pandas.set_option('display.width', 1000)
-        pandas.set_option('display.colheader_justify', 'right')
+        #
+        bottomTotals = []
 
-        #prints out the title of the report and the report
-        print(f"\n\t\t--- {dfTitle} ---\n")
+        #determines the type of each column, if it's an int then it can be summed
+        i = 0
+        while i < len(columnNames):
+            cursor.execute(f"""
+                SELECT DATA_TYPE 
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE 
+                    TABLE_SCHEMA = 'bacchus' AND
+                    TABLE_NAME   = '{tableName}' AND 
+                    COLUMN_NAME  = '{columnNames[i]}'
+                """)
+            columnType = cursor.fetchall()[0][0]
+
+            if columnType == "int":
+                if "_id" not in columnNames[i]:
+                    cursor.execute(f"SELECT SUM({columnNames[i]}) FROM {tableName};")
+                    cell = cursor.fetchall()[0][0]
+                    bottomTotals.append(cell)
+                else:
+                    bottomTotals.append("")
+            else:
+                bottomTotals.append("")
+
+            i += 1
+
+        bottomDivider = []
+        topDivider = []
+        for f in columnNames:
+            bottomDivider.append("-" * len(f))
+            topDivider.append("-" * len(f))
+        
+        #adds dividers and sorts it
+        df.loc[len(df.index)] = bottomDivider
+        df.loc[-1] = topDivider
+        df.sort_index(inplace=True)
+
+        #appends the totals of the columns to the bottom row
+        df.loc[len(df.index)] = bottomTotals
+        
+
+        #
+        print(f"\n\t\t\t\t--- {dfTitle} ---\n")
         print(df.to_string(index=False))
 
         #asks if the user wants a copy of the report in CSV format too
@@ -155,38 +195,25 @@ while masterControl:
     #
     clearScreen()
     print("\nWelcome to Bacchus Business Reports!")
-    print("\nDeveloped by James Brown, Joshua Frazier, Christopher McCracken, and Taylor Reid")
-    print("\nThe following reports are available:")
-    print("\n\t1 - Late Supply Orders")
-    print("\n\t2 - All Wines Sold / by Distributor")
-    print("\n\t3 - Total Wines Sold by Wine Type")
-    print("\n\t4 - Employee Quarterly Hours Report")
-    print("\n\t5 - Exit\n")
+    print("\n1 - Late Supply Orders Report\n\n2 - Wines Sold Report\n\n3 - Employee Quarterly Hours Report\n\n4 - Exit\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
     #
     if selection == "1":
         clearScreen()
-        print("\n1 - List (plain Python, does not require pandas library)\n\n2 - Pandas Table (requires pandas library)\n")
-        tl = input("View it as a pandas table or a list (list does not require pandas) [1/2]:  ").lower()
+        tl = input("View it as a pandas table or a list (list does not require pandas) [t\l]:  ").lower()
         clearScreen()
-        if tl == "1":
-            supplyOverdue("OVERDUE SUPPLIES")
-        elif tl == "2":
+        if tl == "t":
             pdTable("supply_overdue", "OVERDUE SUPPLIES")
-
+        elif tl == "l":
+            supplyOverdue("OVERDUE SUPPLIES")
     elif selection == "2":
         clearScreen()
-        pdTable("sales_all", "ALL WINES SOLD / BY DISTRIBUTOR")
-
+        pdTable("sales_all", "ALL SALES")
     elif selection == "3":
         clearScreen()
-        pdTable("sales_totals_by_wine", "SALES TOTALS BY WINE")
-
-    elif selection == "4":
-        clearScreen()
         pdTable("employee", "ALL EMPLOYEE HOURS")
-    elif selection == "5":
+    elif selection == "4":
         clearScreen()
         print("\nGoodbye and thank you for using Bacchus Business Reports!\n")
         masterControl = False

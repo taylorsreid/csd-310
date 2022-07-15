@@ -20,7 +20,7 @@ THEREFORE, FOLLOW THESE STEPS:
 
         ---Run "CREATE DATABASE bacchus;" as root in MySQL.
 
-        ---Run "python3 bacchus_updates.py" from the command line to refill the database properly.
+        ---Run "python3 bacchus_install.py" from the command line to fill the database properly.
 
         ---Run "pip install pandas" in the command line.
 

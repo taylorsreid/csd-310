@@ -8,13 +8,14 @@ Red Team
 Module 11.1
 '''
 
-from connect import db, cursor, config
+#imports connection protocols and JSON utilities
+from connect import db, cursor
 import json
 
+#some shorthand aliases for success/error messages for later
 ts = " table create.... SUCCESS"
 ds = " data insert..... SUCCESS"
 vs = " view create..... SUCCESS"
-
 tf = " table create.... FAIL | Reason: "
 df = " data insert..... FAIL | Reason: "
 vf = " view create..... FAIL | Reason: "
@@ -29,11 +30,6 @@ except Exception as err:
 ################################# RECREATING TABLES ###########################################
 
 print("\nRecreating tables:")
-
-#try:
-#    cursor.execute("USE bacchus;")
-#except Exception as err:
-#    print(err)
 
 #creates a table with a list of vendors
 try:
@@ -207,7 +203,7 @@ except Exception as err:
 
 ################################# CREATING VIEWS ###########################################
 
-print("Creating views:")
+print("\nCreating views:")
 
 #creates a view of overdue supply shipments that is easier to work with later on
 try:
@@ -225,28 +221,58 @@ except Exception as err:
 #creates a view of the totals of wine sold by distributor that dynamically updates
 #kind proud of this one :)
 try:
-    cursor.execute(f"""CREATE OR REPLACE VIEW sales_totals_distributor AS 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =1 
+    cursor.execute(f"""CREATE OR REPLACE VIEW sales_totals_by_distributor AS 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =1
                         UNION ALL 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =2 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =2
                         UNION ALL 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =3 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =3
                         UNION ALL 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =4 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =4
                         UNION ALL 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =5 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =5
                         UNION ALL 
-                            SELECT distributor_id, SUM(merlot + cabernet + chablis + chardonnay) 
-                            FROM sales WHERE distributor_id =6;
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            FROM sales
+                            WHERE sales.distributor_id =6
                     """)
-    print(f"\tsales_totals_distributors{vs}")
+    print(f"\tsales_totals_by_distributor{vs}")
 except Exception as err:
-    print(f"\tsales_totals_distributors{vf}{err}")
+    print(f"\tsales_totals_by_distributor{vf}{err}")
+
+#
+try:
+    cursor.execute(f"""
+                    CREATE OR REPLACE VIEW sales_totals_by_wine AS 
+                    SELECT SUM(merlot) AS merlot, SUM(cabernet) AS cabernet, SUM(chablis) AS chablis, SUM(chardonnay) AS chardonnay FROM sales;
+                    """)
+    print(f"\tsales_totals_by_wine{vs}")
+except Exception as err:
+    print(f"\tsales_totals_by_wine{vf}{err}")
+
+#
+try:
+    cursor.execute(f"""
+                CREATE OR REPLACE VIEW sales_all AS
+                SELECT distributor_name, merlot, cabernet, chablis, chardonnay, distributor_total
+                FROM sales
+                INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                ORDER BY sales.distributor_id ASC;
+                """)
+    print(f"\tsales_all{vs}")
+except Exception as err:
+    print(f"\tsales_all{vf}{err}")
 
 ############################################################################################
 
