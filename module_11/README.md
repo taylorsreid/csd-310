@@ -16,10 +16,12 @@ IN ADDITION:
     
 THEREFORE, FOLLOW THESE STEPS:
 
-        ---Run "CREATE OR REPLACE DATABASE bacchus;" as root in MySQL.
+        ---Run "DROP DATABASE IF EXISTS bacchus;" as root in MySQL
+
+        ---Run "CREATE DATABASE bacchus;" as root in MySQL.
 
         ---Run "python3 bacchus_updates.py" from the command line to refill the database properly.
 
         ---Run "pip install pandas" in the command line.
-        
+
         ---Finally, run "python3 bacchus_reports.py" in the command line and view the reports :)

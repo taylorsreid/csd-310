@@ -8,7 +8,7 @@ Red Team
 Module 11.1
 '''
 
-from connect import db, cursor
+from connect import db, cursor, config
 import json
 
 ts = " table create.... SUCCESS"
@@ -30,10 +30,10 @@ except Exception as err:
 
 print("\nRecreating tables:")
 
-try:
-    cursor.execute("USE bacchus;")
-except Exception as err:
-    print(err)
+#try:
+#    cursor.execute("USE bacchus;")
+#except Exception as err:
+#    print(err)
 
 #creates a table with a list of vendors
 try:
