@@ -27,6 +27,25 @@ try:
 except Exception as err:
     print(err)
 
+################################# DROP AND RECREATE DATABASE ###########################################
+
+try:
+    cursor.execute("DROP DATABASE IF EXISTS bacchus;")
+    print("Dropping existing bacchus database... SUCCESS")
+except Exception as err:
+    print(f"DROP DATABASE IF EXISTS bacchus;... FAIL | Reason: {err}")
+
+try:
+    cursor.execute("CREATE DATABASE bacchus;")
+    print("Recreate bacchus database... SUCCESS")
+except Exception as err:
+    print(f"CREATE DATABASE bacchus;... FAIL | Reason: {err}")
+
+try:
+    cursor.execute("USE bacchus;")
+except Exception as err:
+    print(f"USE bacchus;... FAIL | Reason: {err}")
+
 ################################# RECREATING TABLES ###########################################
 
 print("\nRecreating tables:")

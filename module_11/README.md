@@ -3,12 +3,6 @@
 BEFORE BEGINNING:
     
     ---Always run all python scripts from the command line, not your IDE.  Running in VS Code has given odd results.
-    
-IN ADDITION:
-    
-    ---We decided to redo some of the database to make it run more smoothly.
-
-    ---For best results and predictable behavior, we recommend recreating the database.
 
     ---bacchus_reports.py relies on the pandas library to show most of the reports.
        If you do not have pandas, the only report you will be able to view is the Overdue Supplies report.
@@ -16,12 +10,8 @@ IN ADDITION:
     
 THEREFORE, FOLLOW THESE STEPS:
 
-        ---Run "DROP DATABASE IF EXISTS bacchus;" as root in MySQL
+        ---Run "python3 bacchus_install.py" from the command line to drop, recreate, and fill the database automatically with the required updates.
 
-        ---Run "CREATE DATABASE bacchus;" as root in MySQL.
-
-        ---Run "python3 bacchus_install.py" from the command line to fill the database properly.
-
-        ---Run "pip install pandas" in the command line.
+        ---Run "pip install pandas" in the command line if you don't have pandas already.
 
         ---Finally, run "python3 bacchus_reports.py" in the command line and view the reports :)
