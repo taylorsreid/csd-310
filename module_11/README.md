@@ -1,17 +1,17 @@
 # Bacchus Group Project - Red Team
 
-BEFORE BEGINNING:
-    
-    ---Always run all python scripts from the command line, not your IDE.  Running in VS Code has given odd results.
+BEFORE BEGINNING DO THE FOLLOWING IF THIS IS YOUR FIRST TIME:
 
-    ---bacchus_reports.py relies on the pandas library to show most of the reports.
-       If you do not have pandas, the only report you will be able to view is the Overdue Supplies report.
-       And only if you select "list" when prompted.
-    
-THEREFORE, FOLLOW THESE STEPS:
+    IN MYSQL:
 
-        ---Run "python3 bacchus_install.py" from the command line to drop, recreate, and fill the database automatically with the required updates.
+        CREATE USER IF NOT EXISTS 'bacchus_user'@'localhost' IDENTIFIED BY 'winesnob';
 
-        ---Run "pip install pandas" in the command line if you don't have pandas already.
+        GRANT ALL PRIVILEGES ON bacchus.* TO 'bacchus_user'@'localhost';
 
-        ---Finally, run "python3 bacchus_reports.py" in the command line and view the reports :)
+    IN YOUR OPERATING SYSTEMS COMMAND LINE:
+
+        "python3 bacchus_install.py" from the command line to drop any outdated version of the database, recreate, and fill the database automatically.
+
+        "pip install pandas" in the command line if you don't have pandas already.
+
+        "python3 bacchus_reports.py" in the command line and view the reports :)

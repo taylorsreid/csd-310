@@ -147,12 +147,15 @@ def pdTable(tableName, dfTitle):
 
 #################### BEGIN MAIN METHOD ####################
 
-#
+cursor.execute("USE bacchus;")
+
+#variable to control the main loop
 masterControl = True
-#
+
+#keeps the program running until the user exits
 while masterControl:
 
-    #
+    #welcome message and menu
     clearScreen()
     print("\nWelcome to Bacchus Business Reports!")
     print("\nDeveloped by James Brown, Joshua Frazier, Christopher McCracken, and Taylor Reid")
@@ -164,7 +167,7 @@ while masterControl:
     print("\n\t5 - Exit\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
-    #
+    #picks method based on user input
     if selection == "1":
         clearScreen()
         print("\n1 - List (plain Python, does not require pandas library)\n\n2 - Pandas Table (requires pandas library)\n")

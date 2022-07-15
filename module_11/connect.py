@@ -16,7 +16,6 @@ config = {
     "user": "bacchus_user",
     "password": "winesnob",
     "host": "127.0.0.1",
-    "database": "bacchus",
     "raise_on_warnings": True
 }
 
