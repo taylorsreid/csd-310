@@ -14,8 +14,12 @@ IN ADDITION:
        If you do not have pandas, the only report you will be able to view is the Overdue Supplies report.
        And only if you select "list" when prompted.
     
-    Therefore, follow these steps:
+THEREFORE, FOLLOW THESE STEPS:
+
         ---Run "CREATE OR REPLACE DATABASE bacchus;" as root in MySQL.
-        ---Run "python3 bacchus_updates.py" refill the database properly.
+
+        ---Run "python3 bacchus_updates.py" from the command line to refill the database properly.
+
         ---Run "pip install pandas" in the command line.
+        
         ---Finally, run "python3 bacchus_reports.py" in the command line and view the reports :)
