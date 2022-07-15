@@ -147,6 +147,7 @@ def pdTable(tableName, dfTitle):
 
 #################### BEGIN MAIN METHOD ####################
 
+#had to add this manually to make everything work together
 cursor.execute("USE bacchus;")
 
 #variable to control the main loop
@@ -160,36 +161,56 @@ while masterControl:
     print("\nWelcome to Bacchus Business Reports!")
     print("\nDeveloped by James Brown, Joshua Frazier, Christopher McCracken, and Taylor Reid")
     print("\nThe following reports are available:")
-    print("\n\t1 - Late Supply Orders")
-    print("\n\t2 - All Wines Sold / by Distributor")
-    print("\n\t3 - Total Wines Sold by Wine Type")
-    print("\n\t4 - Employee Quarterly Hours Report")
-    print("\n\t5 - Exit\n")
+
+    print("\n\tSUPPLY REPORTS:")
+    print("\n\t\t1 - Late Supplies Orders")
+    print("\n\t\t2 - SOMETHING ELSE")
+
+    print("\n\tWINE SALES REPORTS:")
+    print("\n\t\t3 - All Wines Sold / by Distributor")
+    print("\n\t\t4 - Total Wines Sold by Type")
+
+    print("\n\tEMPLOYEE REPORTS:")
+    print("\n\t\t5 - Employee Quarterly Hours")
+    print("\n\t\t6 - SOMETHING ELSE")
+
+    print("\n\t7 - EXIT\n")
     selection = input("Please enter the corresponding number of your selection:  ")
 
     #picks method based on user input
     if selection == "1":
         clearScreen()
-        print("\n1 - List (plain Python, does not require pandas library)\n\n2 - Pandas Table (requires pandas library)\n")
+        print("\n1 - List (plain Python, does not require pandas library)\n")
+        print("\n2 - Pandas Table (requires pandas library)\n")
         tl = input("View it as a pandas table or a list (list does not require pandas) [1/2]:  ").lower()
         clearScreen()
         if tl == "1":
-            supplyOverdue("OVERDUE SUPPLIES")
+            supplyOverdue("Late Supplies Orders")
         elif tl == "2":
-            pdTable("supply_overdue", "OVERDUE SUPPLIES")
+            pdTable("supply_overdue", "Late Supplies Orders")
+
 
     elif selection == "2":
         clearScreen()
-        pdTable("sales_all", "ALL WINES SOLD / BY DISTRIBUTOR")
+        #pdTable()
 
     elif selection == "3":
         clearScreen()
-        pdTable("sales_totals_by_wine", "SALES TOTALS BY WINE")
+        pdTable("sales_all", "All Wines Sold / by Distributor")
 
     elif selection == "4":
         clearScreen()
-        pdTable("employee", "ALL EMPLOYEE HOURS")
+        pdTable("sales_totals_by_wine", "Total Wines Sold by Type")
+
     elif selection == "5":
+        clearScreen()
+        pdTable("employee", "Employee Quarterly Hours")
+
+    elif selection == "6":
+        clearScreen()
+        #pdTable()
+
+    elif selection == "7":
         clearScreen()
         print("\nGoodbye and thank you for using Bacchus Business Reports!\n")
         masterControl = False

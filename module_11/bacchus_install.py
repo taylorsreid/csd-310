@@ -21,6 +21,7 @@ df = " data insert..... FAIL | Reason: "
 vf = " view create..... FAIL | Reason: "
 
 ################################# OPENING JSON FILE WITH VALUES TO FILL DATABASE ###########################################
+
 try:
     with open("bacchus.json") as bacchus_json:
         bacchus = json.load(bacchus_json)
@@ -29,17 +30,19 @@ except Exception as err:
 
 ################################# DROP AND RECREATE DATABASE ###########################################
 
+print("Recreating database:")
+
 try:
     cursor.execute("DROP DATABASE IF EXISTS bacchus;")
-    print("Dropping existing bacchus database... SUCCESS")
+    print("\tDropping existing bacchus database... SUCCESS")
 except Exception as err:
-    print(f"DROP DATABASE IF EXISTS bacchus;... FAIL | Reason: {err}")
+    print(f"\tDROP DATABASE IF EXISTS bacchus;... FAIL | Reason: {err}")
 
 try:
     cursor.execute("CREATE DATABASE bacchus;")
-    print("Recreate bacchus database... SUCCESS")
+    print("\tRecreating bacchus database... SUCCESS")
 except Exception as err:
-    print(f"CREATE DATABASE bacchus;... FAIL | Reason: {err}")
+    print(f"\tCREATE DATABASE bacchus;... FAIL | Reason: {err}")
 
 try:
     cursor.execute("USE bacchus;")
@@ -292,6 +295,37 @@ try:
     print(f"\tsales_all{vs}")
 except Exception as err:
     print(f"\tsales_all{vf}{err}")
+
+try:
+    cursor.execute(f"""CREATE OR REPLACE VIEW employee_total_hours_per_year AS 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =1
+                        UNION ALL 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =2
+                        UNION ALL 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =3
+                        UNION ALL 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =4
+                        UNION ALL 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =5
+                        UNION ALL 
+                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            FROM employee
+                            WHERE employee_id =6;
+                    """)
+    print(f"\temployee_total_hours_per_year{vs}")
+except Exception as err:
+    print(f"\temployee_total_hours_per_year{vf}{err}")
+
 
 ############################################################################################
 
