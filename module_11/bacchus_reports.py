@@ -103,14 +103,23 @@ def supplyOverdue(reportTitle):
     input("\nPress enter to exit to the main menu...")
 
 # 
-def pdTable(tableName, dfTitle):
-
-    #executes SQL
-    cursor.execute(f"SELECT * FROM {tableName}")
+def pdTable(args):
 
     #under a try block in case the user didn't pip install pandas
     try:
         import pandas
+
+        #for arg in args:
+
+        tableName = args[0]
+        #print(tableName)
+        friendlyName = args[1]
+        #print(friendlyName)
+        #print(str(args))
+        #print(str(arg))
+
+        #executes SQL
+        cursor.execute(f"SELECT * FROM {tableName}")
 
         #loads results of SQL query into a pandas dataframe for later viewing
         df = pandas.DataFrame(cursor.fetchall())
@@ -123,17 +132,20 @@ def pdTable(tableName, dfTitle):
         pandas.set_option('display.colheader_justify', 'right')
 
         #prints out the title of the report and the report
-        print(f"\n\t\t--- {dfTitle} ---\n")
+        print(f"\n\t\t--- {friendlyName} ---\n")
         print(df.to_string(index=False))
 
         #asks if the user wants a copy of the report in CSV format too
-        xchn = input("\nDo you wish to generate a CSV or HTML copy of the report?  Or none? [c/h/n]:  ").lower()
-        if xchn == "c":
-            df.to_csv(f"{dfTitle}.csv", index=False)
-            print(f"\nCSV file written to {dfTitle}.csv in the same directory as this program.")
-        elif xchn == "h":
-            df.to_html(f"{dfTitle}.html", index=False)
-            print(f"\nHTML file written to {dfTitle}.html in the same directory as this program.")
+        che = input("\nDo you wish to generate a CSV or HTML copy of this report?  Hit enter for none [c/h/enter]:  ").lower()
+        if che == "c":
+            df.to_csv(f"{friendlyName}.csv", index=False)
+            print(f"\nCSV file written to {friendlyName}.csv in the same directory as this program.")
+        elif che == "h":
+            df.to_html(f"{friendlyName}.html", index=False)
+            print(f"\nHTML file written to {friendlyName}.html in the same directory as this program.")
+
+        print()
+        print("-" * 100)
 
     except ImportError as err:
         print(err)
@@ -160,57 +172,36 @@ while masterControl:
     clearScreen()
     print("\nWelcome to Bacchus Business Reports!")
     print("\nDeveloped by James Brown, Joshua Frazier, Christopher McCracken, and Taylor Reid")
-    print("\nThe following reports are available:")
+    print("\nThe following options are available:")
 
-    print("\n\tSUPPLY REPORTS:")
-    print("\n\t\t1 - Late Supplies Orders")
-    print("\n\t\t2 - SOMETHING ELSE")
+    print("\n\t1 - Supplies")
+    print("\n\t2 - Wine Sales")
+    print("\n\t3 - Employee Hours")
 
-    print("\n\tWINE SALES REPORTS:")
-    print("\n\t\t3 - All Wines Sold / by Distributor")
-    print("\n\t\t4 - Total Wines Sold by Type")
-
-    print("\n\tEMPLOYEE REPORTS:")
-    print("\n\t\t5 - Employee Quarterly Hours")
-    print("\n\t\t6 - SOMETHING ELSE")
-
-    print("\n\t7 - EXIT\n")
-    selection = input("Please enter the corresponding number of your selection:  ")
+    print("\n\t4 - EXIT\n")
+    selection = input("Please enter the number of your selection [1/2/3/4]:  ")
 
     #picks method based on user input
     if selection == "1":
         clearScreen()
-        print("\n1 - List (plain Python, does not require pandas library)\n")
+        print("\n1 - List (does not require pandas library)\n")
         print("\n2 - Pandas Table (requires pandas library)\n")
-        tl = input("View it as a pandas table or a list (list does not require pandas) [1/2]:  ").lower()
+        tl = input("View it as a pandas table or a list [1/2]:  ").lower()
         clearScreen()
         if tl == "1":
             supplyOverdue("Late Supplies Orders")
         elif tl == "2":
-            pdTable("supply_overdue", "Late Supplies Orders")
-
+            pdTable(["supply_overdue", "Late Supplies Orders"])
 
     elif selection == "2":
         clearScreen()
-        #pdTable()
-
+        pdTable(["sales_all", "All Wines Sold and Total by Distributor"])
+      
     elif selection == "3":
         clearScreen()
-        pdTable("sales_all", "All Wines Sold / by Distributor")
+        pdTable(["employee", "Employee Quarterly Hours"])
 
     elif selection == "4":
-        clearScreen()
-        pdTable("sales_totals_by_wine", "Total Wines Sold by Type")
-
-    elif selection == "5":
-        clearScreen()
-        pdTable("employee", "Employee Quarterly Hours")
-
-    elif selection == "6":
-        clearScreen()
-        #pdTable()
-
-    elif selection == "7":
         clearScreen()
         print("\nGoodbye and thank you for using Bacchus Business Reports!\n")
         masterControl = False

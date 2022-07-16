@@ -9,8 +9,15 @@ Module 11.1
 '''
 
 #imports connection protocols and JSON utilities
+import errno
 from connect import db, cursor
 import json
+import time
+
+import mysql.connector
+from mysql.connector import errorcode
+
+startTime = time.time()
 
 #some shorthand aliases for success/error messages for later
 ts = " table create.... SUCCESS"
@@ -32,11 +39,12 @@ except Exception as err:
 
 print("Recreating database:")
 
+#self explanatory
 try:
     cursor.execute("DROP DATABASE IF EXISTS bacchus;")
-    print("\tDropping existing bacchus database... SUCCESS")
-except Exception as err:
-    print(f"\tDROP DATABASE IF EXISTS bacchus;... FAIL | Reason: {err}")
+    print("\tDropping existing bacchus database if it exists... SUCCESS")
+except mysql.connector.Error:
+    print("\tDropping existing bacchus database if it exists... DOESN'T EXIST")
 
 try:
     cursor.execute("CREATE DATABASE bacchus;")
@@ -119,8 +127,8 @@ except Exception as err:
 try:
     cursor.execute("""CREATE OR REPLACE TABLE supply_order
                         (order_date DATE NOT NULL, 
-                        promised_delivery_date DATE NOT NULL, 
-                        actual_delivery_date DATE, 
+                        promised_date DATE NOT NULL, 
+                        actual_date DATE, 
                         order_price DOUBLE NOT NULL, 
                         vendor_id INT NOT NULL, 
                         PRIMARY KEY(order_date), 
@@ -213,11 +221,11 @@ try:
     while i < len(bacchus["supply_order"]):
         order_date = bacchus["supply_order"][i]["order_date"]
         order_date = bacchus["supply_order"][i]["order_date"]
-        promised_delivery_date = bacchus["supply_order"][i]["promised_delivery_date"]
-        actual_delivery_date = bacchus["supply_order"][i]["actual_delivery_date"]
+        promised_date = bacchus["supply_order"][i]["promised_date"]
+        actual_date = bacchus["supply_order"][i]["actual_date"]
         order_price = bacchus["supply_order"][i]["order_price"]
         vendor_id = bacchus["supply_order"][i]["vendor_id"]
-        cursor.execute(f"INSERT INTO supply_order(order_date, promised_delivery_date, actual_delivery_date, order_price, vendor_id) VALUES('{order_date}', '{promised_delivery_date}', '{actual_delivery_date}', '{order_price}', '{vendor_id}');")
+        cursor.execute(f"INSERT INTO supply_order(order_date, promised_date, actual_date, order_price, vendor_id) VALUES('{order_date}', '{promised_date}', '{actual_date}', '{order_price}', '{vendor_id}');")
         i += 1
     print(f"\tsupply_order{ds}")
 except Exception as err:
@@ -231,10 +239,10 @@ print("\nCreating views:")
 try:
     cursor.execute(f"""
                     CREATE OR REPLACE VIEW supply_overdue AS 
-                    SELECT order_date, promised_delivery_date, actual_delivery_date, vendor_name 
+                    SELECT order_date, promised_date, actual_date, vendor_name 
                     FROM supply_order 
                     INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
-                    WHERE actual_delivery_date > promised_delivery_date;
+                    WHERE actual_date > promised_date;
                     """)
     print(f"\tsupply_overdue{vs}")
 except Exception as err:
@@ -244,27 +252,27 @@ except Exception as err:
 #kind proud of this one :)
 try:
     cursor.execute(f"""CREATE OR REPLACE VIEW sales_totals_by_distributor AS 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =1
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =2
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =3
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =4
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =5
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay)  AS distributor_total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
                             FROM sales
                             WHERE sales.distributor_id =6
                     """)
@@ -272,26 +280,24 @@ try:
 except Exception as err:
     print(f"\tsales_totals_by_distributor{vf}{err}")
 
-#
 try:
     cursor.execute(f"""
-                    CREATE OR REPLACE VIEW sales_totals_by_wine AS 
-                    SELECT SUM(merlot) AS merlot, SUM(cabernet) AS cabernet, SUM(chablis) AS chablis, SUM(chardonnay) AS chardonnay FROM sales;
+                    CREATE OR REPLACE VIEW sales_all AS 
+                    SELECT distributor_name, merlot, cabernet, chablis, chardonnay, total
+                    FROM sales
+                    INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
+                    INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                    
+                    UNION
+                        SELECT 'total' AS distributor_name, SUM(merlot), SUM(cabernet), SUM(chablis), SUM(chardonnay), SUM(total) AS total
+                        FROM sales
+                        INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                    UNION
+                        SELECT 'average' AS distributor_name, ROUND(AVG(merlot), 2), ROUND(AVG(cabernet), 2), ROUND(AVG(chablis), 2), ROUND(AVG(chardonnay), 2), ROUND(AVG(total), 2) AS average
+                        FROM sales
+                        INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                    ;
                     """)
-    print(f"\tsales_totals_by_wine{vs}")
-except Exception as err:
-    print(f"\tsales_totals_by_wine{vf}{err}")
-
-#
-try:
-    cursor.execute(f"""
-                CREATE OR REPLACE VIEW sales_all AS
-                SELECT distributor_name, merlot, cabernet, chablis, chardonnay, distributor_total
-                FROM sales
-                INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
-                INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
-                ORDER BY sales.distributor_id ASC;
-                """)
     print(f"\tsales_all{vs}")
 except Exception as err:
     print(f"\tsales_all{vf}{err}")
@@ -326,9 +332,28 @@ try:
 except Exception as err:
     print(f"\temployee_total_hours_per_year{vf}{err}")
 
+try:
+    cursor.execute(f"""
+                CREATE OR REPLACE VIEW supply_all AS 
+                   SELECT vendor_name, order_date, promised_date, actual_date, order_price
+                   FROM supply_order
+                   INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
+                UNION
+                    SELECT '', '', '', '', ''
+                UNION
+                    SELECT 'total', '', '', SUM(order_price), ''
+                    FROM supply_order
+                UNION
+                    SELECT 'average', '', '', ROUND(AVG(order_price)), ''
+                    FROM supply_order
+                ;
+                """)
+    print(f"\tsupply_all{vs}")
+except Exception as err:
+    print(f"\tsupply_all{vf}{err}")
 
 ############################################################################################
 
 #commits and closes connections
 db.commit()
-print("\nDone")
+print(F"\nCOMPLETED BACCHUS INSTALL IN {round((time.time() - startTime), 2)} SECONDS")

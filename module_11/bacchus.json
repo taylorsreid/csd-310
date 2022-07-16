@@ -131,48 +131,48 @@
     "supply_order" : [
         {
             "order_date" : "2021-08-05",
-            "promised_delivery_date" : "2021-08-14",
-            "actual_delivery_date" : "2021-08-15",
+            "promised_date" : "2021-08-14",
+            "actual_date" : "2021-08-15",
             "order_price" : 123.04,
             "vendor_id" : 1
         },
 
         {
             "order_date" : "2021-09-05",
-            "promised_delivery_date" : "2021-09-14",
-            "actual_delivery_date" : "2021-09-12",
+            "promised_date" : "2021-09-14",
+            "actual_date" : "2021-09-12",
             "order_price" : 110.93,
             "vendor_id" : 1
         },
 
         {
             "order_date" : "2021-08-04",
-            "promised_delivery_date" : "2021-08-11",
-            "actual_delivery_date" : "2021-08-09",
+            "promised_date" : "2021-08-11",
+            "actual_date" : "2021-08-09",
             "order_price" : 98.34,
             "vendor_id" : 2 
         },
 
         {
             "order_date" : "2021-09-07",
-            "promised_delivery_date" : "2021-09-14",
-            "actual_delivery_date" : "2021-09-10",
+            "promised_date" : "2021-09-14",
+            "actual_date" : "2021-09-10",
             "order_price" : 101.68,
             "vendor_id" : 2
         },
 
         {
             "order_date" : "2021-08-14",
-            "promised_delivery_date" : "2021-08-21",
-            "actual_delivery_date" : "2021-09-21",
+            "promised_date" : "2021-08-21",
+            "actual_date" : "2021-09-21",
             "order_price" : 225,
             "vendor_id" : 3
         },
 
         {
             "order_date" : "2021-09-30",
-            "promised_delivery_date" : "2021-10-13",
-            "actual_delivery_date" : "2021-10-30",
+            "promised_date" : "2021-10-13",
+            "actual_date" : "2021-10-30",
             "order_price" : 115,
             "vendor_id" : 3
         }
