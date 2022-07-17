@@ -248,90 +248,130 @@ try:
 except Exception as err:
     print(f"\tsupply_overdue{vf}{err}")
 
-#creates a view of the totals of wine sold by distributor that dynamically updates
-#kind proud of this one :)
+#creates a view of the totals of wine sold by distributor
 try:
-    cursor.execute(f"""CREATE OR REPLACE VIEW sales_totals_by_distributor AS 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+    cursor.execute(f"""CREATE OR REPLACE VIEW sales_by_distributor AS 
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =1
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =2
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =3
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =4
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =5
                         UNION ALL 
-                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total
+                            SELECT sales.distributor_id, SUM(merlot + cabernet + chablis + chardonnay) AS total, ROUND(SUM(merlot + cabernet + chablis + chardonnay) / 4, 2) AS average
                             FROM sales
                             WHERE sales.distributor_id =6
                     """)
-    print(f"\tsales_totals_by_distributor{vs}")
+    print(f"\tsales_by_distributor{vs}")
 except Exception as err:
-    print(f"\tsales_totals_by_distributor{vf}{err}")
+    print(f"\tsales_by_distributor{vf}{err}")
 
+#creates a view of all sales statistics
 try:
     cursor.execute(f"""
-                    CREATE OR REPLACE VIEW sales_all AS 
-                    SELECT distributor_name, merlot, cabernet, chablis, chardonnay, total
+                    CREATE OR REPLACE VIEW sales_all AS
+                    SELECT distributor_name, merlot, cabernet, chablis, chardonnay, total, average
                     FROM sales
                     INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
-                    INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
-                    
+                    INNER JOIN sales_by_distributor ON sales.distributor_id = sales_by_distributor.distributor_id    
                     UNION
-                        SELECT 'total' AS distributor_name, SUM(merlot), SUM(cabernet), SUM(chablis), SUM(chardonnay), SUM(total) AS total
+                        SELECT 'total' AS distributor_name, SUM(merlot), SUM(cabernet), SUM(chablis), SUM(chardonnay), SUM(total) AS total, average
                         FROM sales
-                        INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                        INNER JOIN sales_by_distributor on sales.distributor_id = sales_by_distributor.distributor_id
                     UNION
-                        SELECT 'average' AS distributor_name, ROUND(AVG(merlot), 2), ROUND(AVG(cabernet), 2), ROUND(AVG(chablis), 2), ROUND(AVG(chardonnay), 2), ROUND(AVG(total), 2) AS average
+                        SELECT 'average' AS distributor_name, ROUND(AVG(merlot), 2), ROUND(AVG(cabernet), 2), ROUND(AVG(chablis), 2), ROUND(AVG(chardonnay), 2), ROUND(AVG(total), 2) AS average, ''
                         FROM sales
-                        INNER JOIN sales_totals_by_distributor on sales.distributor_id = sales_totals_by_distributor.distributor_id
+                        INNER JOIN sales_by_distributor on sales.distributor_id = sales_by_distributor.distributor_id
                     ;
                     """)
     print(f"\tsales_all{vs}")
 except Exception as err:
     print(f"\tsales_all{vf}{err}")
 
+#creates a view of each employees yearly total and quarterly average hours
 try:
-    cursor.execute(f"""CREATE OR REPLACE VIEW employee_total_hours_per_year AS 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+    cursor.execute(f"""CREATE OR REPLACE VIEW employee_hours_total_average AS 
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
                             FROM employee
                             WHERE employee_id =1
                         UNION ALL 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
-                            FROM employee
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
+                                FROM employee
                             WHERE employee_id =2
                         UNION ALL 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
-                            FROM employee
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
+                                FROM employee
                             WHERE employee_id =3
                         UNION ALL 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
                             FROM employee
                             WHERE employee_id =4
                         UNION ALL 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
                             FROM employee
                             WHERE employee_id =5
                         UNION ALL 
-                            SELECT employee_id, SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total_hours
+                            SELECT
+                                employee_id,
+                                SUM(q1_hours + q2_hours + q3_hours + q4_hours) AS total,
+                                ROUND(SUM(q1_hours + q2_hours + q3_hours + q4_hours) / 4, 2) AS average
                             FROM employee
                             WHERE employee_id =6;
                     """)
-    print(f"\temployee_total_hours_per_year{vs}")
+    print(f"\temployee_hours_total_average{vs}")
 except Exception as err:
-    print(f"\temployee_total_hours_per_year{vf}{err}")
+    print(f"\temployee_hours_total_average{vf}{err}")
 
+#creates a view of a bunch of employee statistics
+try:
+    cursor.execute(f"""
+                CREATE OR REPLACE VIEW employee_all AS
+                SELECT employee_last_name, employee_first_name, employee_role, q1_hours, q2_hours, q3_hours, q4_hours, total, average
+                FROM employee a
+                INNER JOIN employee_hours_total_average b ON a.employee_id = b.employee_id
+                UNION
+                    SELECT 'total', null, null, SUM(q1_hours), SUM(q2_hours), SUM(q3_hours), SUM(q4_hours), SUM(total), SUM(average)
+                    FROM employee_hours_total_average a
+                    INNER JOIN employee b ON a.employee_id = b.employee_id
+                UNION
+                    SELECT 'average', null, null, ROUND(AVG(q1_hours), 2), ROUND(AVG(q2_hours), 2), ROUND(AVG(q3_hours), 2), ROUND(AVG(q4_hours), 2), ROUND(AVG(total), 2), ROUND(AVG(average), 2)
+                    FROM employee_hours_total_average a
+                    INNER JOIN employee b ON a.employee_id = b.employee_id
+                ;
+                """)
+    print(f"\temployee_all{vs}")        
+except Exception as err:
+    print(f"\temployee_all{vf}{err}")
+
+#creates a view of a bunch of supply statistics
 try:
     cursor.execute(f"""
                 CREATE OR REPLACE VIEW supply_all AS 
@@ -339,12 +379,10 @@ try:
                    FROM supply_order
                    INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
                 UNION
-                    SELECT '', '', '', '', ''
-                UNION
-                    SELECT 'total', '', '', SUM(order_price), ''
+                    SELECT 'total', null, null, NULL, SUM(order_price)
                     FROM supply_order
                 UNION
-                    SELECT 'average', '', '', ROUND(AVG(order_price)), ''
+                    SELECT 'average', null, null, null, ROUND(AVG(order_price), 2)
                     FROM supply_order
                 ;
                 """)
@@ -356,4 +394,4 @@ except Exception as err:
 
 #commits and closes connections
 db.commit()
-print(F"\nCOMPLETED BACCHUS INSTALL IN {round((time.time() - startTime), 2)} SECONDS")
+print(f"\nBacchus Install completed in {round((time.time() - startTime), 2)} seconds.\n")

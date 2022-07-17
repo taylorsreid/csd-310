@@ -25,12 +25,12 @@ def clearScreen():
     except:
         pass
 
-#
+#creates a CSV file for people who can't or won't pip install pandas
 def createCsv(csvFileName, header):
     with open(csvFileName, "w") as file:
         file.write(header + "\n")
 
-#writes a csv file of overdue orders
+#writes to that csv file of overdue orders
 def writeCsv(csvFileName, line):
     with open(csvFileName, "a") as file:
         i = 0
@@ -50,7 +50,7 @@ def getColumnNames(tableName):
         i += 1
     return columnNames
 
-#
+#prints out a report of overdue supply shipments for people who aren't using pandas
 def supplyOverdue(reportTitle):
 
     #asks if the user wants a copy of the report in CSV format too
@@ -65,16 +65,16 @@ def supplyOverdue(reportTitle):
     #formatting string for dates
     dateFormat = "%B %d, %Y"
 
-    #
+    #if yes, create csv
     if yn == "y":
         createCsv(f"{reportTitle}.csv", "VENDOR NAME, ORDER DATE, PROMISED DATE, ACTUAL DELIVERY DATE, DAYS OVERDUE")
 
     print(f"\t\t{reportTitle}")
 
-    #
+    #loops through the overdue orders and prints them to the screen
     for order in orders:
 
-        #
+        #some friendlier names for things at specific indexes
         vendorName = order[3]
         orderDate = order[0]
         promisedDate = order[1]
@@ -82,7 +82,7 @@ def supplyOverdue(reportTitle):
         daysOverdue = order[2] - order[1]
         daysOverdue = daysOverdue.days
 
-        #
+        #prints it formatted
         print()
         print(f"Vendor Name         : {vendorName}")
         print(f"Order Date          : {orderDate.strftime(dateFormat)}")
@@ -90,67 +90,67 @@ def supplyOverdue(reportTitle):
         print(f"Actual Delivery Date: {actualDate.strftime(dateFormat)}")
         print(f"Days Overdue        : {daysOverdue}")
 
-        #
+        #if user wants to, writes to csv
         if yn == "y":
             line = [vendorName, orderDate, promisedDate, actualDate, daysOverdue]
             writeCsv(f"{reportTitle}.csv", line)
 
-    #
+    #success message
     if yn == "y":
         print(f"\nCSV file written to {reportTitle} in the same directory as this program.")
 
     #holds the command line open for viewing the report
     input("\nPress enter to exit to the main menu...")
 
-# 
+#the star of the show, gets views, puts them in a pandas dataframe, prints it to the screen, then can output it as a csv or html file
 def pdTable(args):
 
     #under a try block in case the user didn't pip install pandas
     try:
         import pandas
 
-        #for arg in args:
+        for arg in args:
 
-        tableName = args[0]
-        #print(tableName)
-        friendlyName = args[1]
-        #print(friendlyName)
-        #print(str(args))
-        #print(str(arg))
+            #friendlier names again
+            viewName = arg[0]
+            friendlyName = arg[1]
 
-        #executes SQL
-        cursor.execute(f"SELECT * FROM {tableName}")
+            #executes SQL
+            cursor.execute(f"SELECT * FROM {viewName}")
 
-        #loads results of SQL query into a pandas dataframe for later viewing
-        df = pandas.DataFrame(cursor.fetchall())
-        
-        #retrieves names of columns from MySQL and sets the dataframe's to match
-        df.columns = getColumnNames(tableName)
+            #loads results of SQL query into a pandas dataframe for later viewing
+            df = pandas.DataFrame(cursor.fetchall())
+            
+            #retrieves names of columns from MySQL and sets the dataframe's to match
+            df.columns = getColumnNames(viewName)
 
-        #formatting to make the dataframe look pretty
-        pandas.set_option('display.width', 1000)
-        pandas.set_option('display.colheader_justify', 'right')
+            #formatting to make the dataframe look pretty
+            pandas.set_option('display.width', 1000)
+            pandas.set_option('display.colheader_justify', 'right')
 
-        #prints out the title of the report and the report
-        print(f"\n\t\t--- {friendlyName} ---\n")
-        print(df.to_string(index=False))
+            #prints out the title of the report and the report
+            print(f"\n\t\t--- {friendlyName} ---\n")
+            print(df.to_string(index=False))
 
-        #asks if the user wants a copy of the report in CSV format too
-        che = input("\nDo you wish to generate a CSV or HTML copy of this report?  Hit enter for none [c/h/enter]:  ").lower()
-        if che == "c":
-            df.to_csv(f"{friendlyName}.csv", index=False)
-            print(f"\nCSV file written to {friendlyName}.csv in the same directory as this program.")
-        elif che == "h":
-            df.to_html(f"{friendlyName}.html", index=False)
-            print(f"\nHTML file written to {friendlyName}.html in the same directory as this program.")
+            #asks if the user wants a copy of the report in CSV format too
+            che = input("\nDo you wish to generate a CSV or HTML copy of this report?  Hit enter for none [c/h/enter]:  ").lower()
+            if che == "c":
+                df.to_csv(f"{friendlyName}.csv", index=False)
+                print(f"\nCSV file written to {friendlyName}.csv in the same directory as this program.")
+            elif che == "h":
+                df.to_html(f"{friendlyName}.html", index=False)
+                print(f"\nHTML file written to {friendlyName}.html in the same directory as this program.")
 
-        print()
-        print("-" * 100)
+            #prints a divider for when there's multiple reports
+            print()
+            print("-" * 100)
 
+    #if the user didn't install pandas
     except ImportError as err:
         print(err)
         print("\nYou need to run \"pip install pandas\" to view this report!")
     
+    #for any other exceptions
     except Exception as err:
         print(err)
  
@@ -191,15 +191,15 @@ while masterControl:
         if tl == "1":
             supplyOverdue("Late Supplies Orders")
         elif tl == "2":
-            pdTable(["supply_overdue", "Late Supplies Orders"])
+            pdTable([["supply_all", "All Supply Shipments Report"],["supply_overdue", "Late Supply Orders Report"]])
 
     elif selection == "2":
         clearScreen()
-        pdTable(["sales_all", "All Wines Sold and Total by Distributor"])
+        pdTable([["sales_all", "Wine Sales Report"]])
       
     elif selection == "3":
         clearScreen()
-        pdTable(["employee", "Employee Quarterly Hours"])
+        pdTable([["employee_all", "Employee Hours Report"]])
 
     elif selection == "4":
         clearScreen()
