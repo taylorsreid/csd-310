@@ -8,9 +8,6 @@ Red Team
 Module 11.1
 '''
 
-#used for showing execution time
-startTime = time.time()
-
 #imports connection protocols and JSON utilities
 import errno
 from connect import db, cursor
@@ -20,6 +17,8 @@ import time
 import mysql.connector
 from mysql.connector import errorcode
 
+#used for showing execution time
+startTime = time.time()
 
 #some shorthand aliases for success/error messages for later
 ts = " table create.... SUCCESS"
