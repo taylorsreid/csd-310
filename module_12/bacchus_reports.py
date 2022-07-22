@@ -26,20 +26,6 @@ def clearScreen():
     except:
         pass
 
-#creates a CSV file for people who can't or won't pip install pandas
-def createCsv(csvFileName, header):
-    with open(csvFileName, "w") as file:
-        file.write(header + "\n")
-
-#writes to that csv file of overdue orders
-def writeCsv(csvFileName, line):
-    with open(csvFileName, "a") as file:
-        i = 0
-        while i < (len(line) - 1):
-            file.write(str(line[i]) + ", ")
-            i += 1
-        file.write(str(line[-1]) + "\n")
-
 #gets and returns column names
 def getColumnNames(tableName):
     cursor.execute(f"SHOW COLUMNS FROM {tableName};")
@@ -50,60 +36,6 @@ def getColumnNames(tableName):
         columnNames.append(results[i][0])
         i += 1
     return columnNames
-
-#prints out a report of overdue supply shipments for people who aren't using pandas
-def supplyOverdue(reportTitle):
-
-    #asks if the user wants a copy of the report in CSV format too
-    yn = input("\nDo you wish to generate a CSV file of the report as well? [y/n]:  ").lower()
-    
-    clearScreen()
-
-    #pulls the view
-    cursor.execute("SELECT * FROM supply_overdue;")
-    orders = cursor.fetchall()
-
-    #formatting string for dates
-    #dateFormat = "%B %d, %Y"
-
-    #if yes, create csv
-    if yn == "y":
-        createCsv(f"{reportTitle}.csv", "VENDOR NAME, ORDER DATE, PROMISED DATE, ACTUAL DELIVERY DATE, DAYS OVERDUE")
-
-    print(f"\t\t{reportTitle}")
-
-    #loops through the overdue orders and prints them to the screen
-    for order in orders:
-
-        #some friendlier names for things at specific indexes
-        vendorName = order[3]
-        orderDate = order[0]
-        promisedDate = order[1]
-        actualDate = order[2]
-        daysOverdue = order[2] - order[1]
-        daysOverdue = daysOverdue.days
-
-        #prints it formatted
-        print()
-        print(f"Vendor Name         : {vendorName}")
-        print(f"Order Date          : {orderDate}")
-        print(f"Promised Date       : {promisedDate}")
-        print(f"Actual Delivery Date: {actualDate}")
-        print(f"Days Overdue        : {daysOverdue}")
-
-        #if user wants to, writes to csv
-        if yn == "y":
-            line = [vendorName, orderDate, promisedDate, actualDate, daysOverdue]
-            writeCsv(f"{reportTitle}.csv", line)
-
-    print(f"\nReport generated on {datetime.now().strftime('%Y-%m-%d @ %H:%M')}")
-
-    #success message
-    if yn == "y":
-        print(f"\nCSV file written to {reportTitle} in the same directory as this program.")
-
-    #holds the command line open for viewing the report
-    input("\nPress enter to exit to the main menu...")
 
 #the star of the show, gets views, puts them in a pandas dataframe, prints it to the screen, then can output it as a csv or html file
 def pdTable(args):
@@ -180,9 +112,9 @@ while masterControl:
     clearScreen()
     print("\nWelcome to Bacchus Business Reports!")
     print("\nDeveloped by James Brown, Joshua Frazier, Christopher McCracken, and Taylor Reid")
-    print("\nThe following options are available:")
+    print("\nThe following reports are available:")
 
-    print("\n\t1 - Supplies")
+    print("\n\t1 - Supply Orders")
     print("\n\t2 - Wine Sales")
     print("\n\t3 - Employee Hours")
 
@@ -192,14 +124,7 @@ while masterControl:
     #picks method based on user input
     if selection == "1":
         clearScreen()
-        print("\n1 - List (does not require pandas library)\n")
-        print("\n2 - Pandas Table (requires pandas library)\n")
-        tl = input("View it as a pandas table or a list [1/2]:  ").lower()
-        clearScreen()
-        if tl == "1":
-            supplyOverdue("Late Supplies Orders")
-        elif tl == "2":
-            pdTable([["supply_all", "All Supply Shipments Report"],["supply_overdue", "Late Supply Orders Report"]])
+        pdTable([["supply_all", "All Supply Orders Report"],["supply_overdue", "Late Supply Orders Report"]])
 
     elif selection == "2":
         clearScreen()
