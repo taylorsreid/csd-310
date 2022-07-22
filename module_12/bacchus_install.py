@@ -236,19 +236,6 @@ except Exception as err:
 
 print("\nCreating views:")
 
-#creates a view of overdue supply shipments that is easier to work with later on
-try:
-    cursor.execute(f"""
-                    CREATE OR REPLACE VIEW supply_overdue AS 
-                    SELECT  vendor_name AS 'Vendor Name', order_date AS 'Order Date', promised_date AS 'Promised Date', actual_date AS 'Actual Delivery Date'
-                    FROM supply_order 
-                    INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
-                    WHERE actual_date > promised_date;
-                    """)
-    print(f"\tsupply_overdue{vs}")
-except Exception as err:
-    print(f"\tsupply_overdue{vf}{err}")
-
 #creates a view of the totals of wine sold by distributor
 try:
     cursor.execute(f"""CREATE OR REPLACE VIEW sales_by_distributor AS 
@@ -284,16 +271,16 @@ except Exception as err:
 try:
     cursor.execute(f"""
                     CREATE OR REPLACE VIEW sales_all AS
-                    SELECT distributor_name AS 'Distributor Name', merlot AS Merlot, cabernet AS Cabernet, chablis AS Chablis, chardonnay AS Chardonnay, total AS Total, average AS Average
+                    SELECT distributor_name AS 'Distributor Name', merlot AS Merlot, cabernet AS Cabernet, chablis AS Chablis, chardonnay AS Chardonnay, total AS TOTAL, average AS AVERAGE
                     FROM sales
                     INNER JOIN distributor ON sales.distributor_id = distributor.distributor_id
                     INNER JOIN sales_by_distributor ON sales.distributor_id = sales_by_distributor.distributor_id    
                     UNION
-                        SELECT 'Total' AS distributor_name, SUM(merlot), SUM(cabernet), SUM(chablis), SUM(chardonnay), SUM(total) AS total, average
+                        SELECT 'TOTAL' AS distributor_name, SUM(merlot), SUM(cabernet), SUM(chablis), SUM(chardonnay), SUM(total) AS total, average
                         FROM sales
                         INNER JOIN sales_by_distributor on sales.distributor_id = sales_by_distributor.distributor_id
                     UNION
-                        SELECT 'Average' AS distributor_name, ROUND(AVG(merlot), 0), ROUND(AVG(cabernet), 0), ROUND(AVG(chablis), 0), ROUND(AVG(chardonnay), 0), ROUND(AVG(total), 0) AS Total, ROUND(AVG(average), 0) AS Average
+                        SELECT 'AVERAGE' AS distributor_name, ROUND(AVG(merlot), 0), ROUND(AVG(cabernet), 0), ROUND(AVG(chablis), 0), ROUND(AVG(chardonnay), 0), ROUND(AVG(total), 0) AS Total, ROUND(AVG(average), 0) AS Average
                         FROM sales
                         INNER JOIN sales_by_distributor on sales.distributor_id = sales_by_distributor.distributor_id
                     ;
@@ -355,15 +342,15 @@ except Exception as err:
 try:
     cursor.execute(f"""
                 CREATE OR REPLACE VIEW employee_all AS
-                SELECT employee_last_name AS 'Last Name', employee_first_name AS 'First Name', employee_role AS 'Role', q1_hours AS 'Q1 Hours', q2_hours AS 'Q2 Hours', q3_hours AS 'Q3 Hours', q4_hours AS 'Q4 Hours', total AS Total, average AS Average
+                SELECT employee_last_name AS 'Last Name', employee_first_name AS 'First Name', employee_role AS 'Role', q1_hours AS 'Q1 Hours', q2_hours AS 'Q2 Hours', q3_hours AS 'Q3 Hours', q4_hours AS 'Q4 Hours', total AS 'TOTAL', average AS 'AVERAGE'
                 FROM employee a
                 INNER JOIN employee_hours_total_average b ON a.employee_id = b.employee_id
                 UNION
-                    SELECT 'Total', null, null, SUM(q1_hours), SUM(q2_hours), SUM(q3_hours), SUM(q4_hours), SUM(total), SUM(average)
+                    SELECT ' ', ' ', 'TOTAL', SUM(q1_hours), SUM(q2_hours), SUM(q3_hours), SUM(q4_hours), SUM(total), SUM(average)
                     FROM employee_hours_total_average a
                     INNER JOIN employee b ON a.employee_id = b.employee_id
                 UNION
-                    SELECT 'Average', null, null, ROUND(AVG(q1_hours), 0), ROUND(AVG(q2_hours), 0), ROUND(AVG(q3_hours), 0), ROUND(AVG(q4_hours), 0), ROUND(AVG(total), 0), ROUND(AVG(average), 0)
+                    SELECT ' ', ' ', 'AVERAGE', ROUND(AVG(q1_hours), 0), ROUND(AVG(q2_hours), 0), ROUND(AVG(q3_hours), 0), ROUND(AVG(q4_hours), 0), ROUND(AVG(total), 0), ROUND(AVG(average), 0)
                     FROM employee_hours_total_average a
                     INNER JOIN employee b ON a.employee_id = b.employee_id
                 ;
@@ -376,20 +363,33 @@ except Exception as err:
 try:
     cursor.execute(f"""
                 CREATE OR REPLACE VIEW supply_all AS 
-                   SELECT vendor_name, order_date, promised_date, actual_date, order_price
+                   SELECT vendor_name AS 'Vendor Name', order_date AS 'Order Date', promised_date AS 'Promised Date', actual_date AS 'Delivery Date', order_price AS 'Order Price'
                    FROM supply_order
                    INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
                 UNION
-                    SELECT 'total', null, null, NULL, SUM(order_price)
+                    SELECT ' ', ' ', ' ', 'TOTAL', SUM(order_price)
                     FROM supply_order
                 UNION
-                    SELECT 'average', null, null, null, ROUND(AVG(order_price), 2)
+                    SELECT ' ', ' ', ' ', 'AVERAGE', ROUND(AVG(order_price), 2)
                     FROM supply_order
                 ;
                 """)
     print(f"\tsupply_all{vs}")
 except Exception as err:
     print(f"\tsupply_all{vf}{err}")
+
+#creates a view of overdue supply shipments that is easier to work with later on
+try:
+    cursor.execute(f"""
+                    CREATE OR REPLACE VIEW supply_overdue AS 
+                    SELECT vendor_name AS 'Vendor Name', order_date AS 'Order Date', promised_date AS 'Promised Date', actual_date AS 'Delivery Date', order_price AS 'Order Price', DATEDIFF(actual_date, promised_date) AS 'Days Overdue'
+                    FROM supply_order 
+                    INNER JOIN vendor ON supply_order.vendor_id = vendor.vendor_id
+                    WHERE actual_date > promised_date;
+                    """)
+    print(f"\tsupply_overdue{vs}")
+except Exception as err:
+    print(f"\tsupply_overdue{vf}{err}")
 
 ############################################################################################
 

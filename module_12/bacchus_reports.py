@@ -64,7 +64,7 @@ def supplyOverdue(reportTitle):
     orders = cursor.fetchall()
 
     #formatting string for dates
-    dateFormat = "%B %d, %Y"
+    #dateFormat = "%B %d, %Y"
 
     #if yes, create csv
     if yn == "y":
@@ -86,9 +86,9 @@ def supplyOverdue(reportTitle):
         #prints it formatted
         print()
         print(f"Vendor Name         : {vendorName}")
-        print(f"Order Date          : {orderDate.strftime(dateFormat)}")
-        print(f"Promised Date       : {promisedDate.strftime(dateFormat)}")
-        print(f"Actual Delivery Date: {actualDate.strftime(dateFormat)}")
+        print(f"Order Date          : {orderDate}")
+        print(f"Promised Date       : {promisedDate}")
+        print(f"Actual Delivery Date: {actualDate}")
         print(f"Days Overdue        : {daysOverdue}")
 
         #if user wants to, writes to csv
@@ -125,7 +125,10 @@ def pdTable(args):
             df = pandas.DataFrame(cursor.fetchall())
             
             #retrieves names of columns from MySQL and sets the dataframe's to match
-            df.columns = getColumnNames(viewName)
+            if viewName == "supply_all":
+                df.columns = ["Vendor Name", "Order Date", "Promised Date", "Delivery Date", "Order Price"]
+            else:
+                df.columns = getColumnNames(viewName)
 
             #formatting to make the dataframe look pretty
             pandas.set_option('display.width', 1000)

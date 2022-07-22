@@ -12,6 +12,7 @@ Module 11.1
 #library imports
 from connect import db, cursor
 from os import system, name
+from datetime import datetime
 
 #clears the screen and makes everything look pretty
 def clearScreen():
